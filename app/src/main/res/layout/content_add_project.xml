@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    tools:context=".AddProjectActivity">
+
+    <TextView
+        android:id="@+id/PageTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:text="New Project"
+        android:textColor="@color/orange"
+        android:textSize="24sp"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="16dp" />
+    <ImageView
+        android:id="@+id/addProjectButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/baseline_add_task_24"
+        android:layout_alignParentEnd="true"
+        android:layout_alignTop="@id/PageTitle"
+        android:layout_marginEnd="16dp" />
+
+    <EditText
+        android:id="@+id/addProjectName"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_below="@id/PageTitle"
+        android:layout_marginTop="16dp"
+        android:hint="Project Name"
+        android:textSize="20sp"
+        android:textColor="@color/black"
+        android:background="@drawable/orange_border"
+        android:paddingStart="16dp"
+        android:maxLines="1"/>
+
+   <EditText
+       android:id="@+id/addProjectDescription"
+       android:layout_width="match_parent"
+       android:layout_height="match_parent"
+       android:layout_below="@id/addProjectName"
+       android:layout_marginTop="16dp"
+       android:hint="Project Name"
+       android:textSize="20sp"
+       android:textColor="@color/black"
+       android:background="@drawable/orange_border"
+       android:paddingStart="16dp"
+       android:maxLines="1"/>
+
+</RelativeLayout>
