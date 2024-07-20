@@ -1,4 +1,4 @@
-package com.example.pmeuepocaespecial
+package com.example.pmeuepocaespecial.activities.admin
 
 import android.os.Bundle
 import com.google.android.material.snackbar.Snackbar
@@ -7,6 +7,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
+import com.example.pmeuepocaespecial.R
 import com.example.pmeuepocaespecial.databinding.ActivityAddProjectBinding
 
 class AddProjectActivity : AppCompatActivity() {
