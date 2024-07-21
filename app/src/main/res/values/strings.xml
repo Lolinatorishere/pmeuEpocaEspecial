@@ -47,4 +47,11 @@
     <string name="user_permission_user"> User </string>
     <string name="user_permission_manager"> Manager </string>
     <string name="user_permission_admin"> Admin </string>
+
+    <string name="user_update_user_not_exists" > User Does Not Exist </string>
+    <string name="user_update_success_start" > User </string>
+    <string name="user_update_success_end" > Has Been Successfully Updated </string>
+    <string name="user_update_error_username_not_unique">Username Inserted Is not Unique</string>
+    <string name="user_update_error_update_failure">Failed To Update User Please Try Again Later</string>
+
 </resources>

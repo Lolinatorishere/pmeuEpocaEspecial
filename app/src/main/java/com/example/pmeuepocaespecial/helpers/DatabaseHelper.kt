@@ -4,6 +4,8 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import android.provider.Settings.Global.getString
+import com.example.pmeuepocaespecial.R
 import com.example.pmeuepocaespecial.datatypes.Commit
 import com.example.pmeuepocaespecial.datatypes.FullTaskData
 import com.example.pmeuepocaespecial.datatypes.Project
@@ -14,65 +16,65 @@ class DatabaseHelper(context: Context) :
     SQLiteOpenHelper(context, "pmeuproject.db" , null, 0) {
     override fun onCreate(db: SQLiteDatabase?) {
         val createDatabase =
-                "CREATE TABLE IF NOT EXISTS users (" +
-                        "id INTEGER PRIMARY KEY AUTOINCREMENT," +
-                        "name TEXT," +
-                        "username VARCHAR(255) NOT NULL UNIQUE," +
-                        "pfp LONGBLOB DEFAULT NULL," +
-                        "email VARCHAR(255) NOT NULL UNIQUE," +
-                        "password VARCHAR(255) NOT NULL," +
-                        "user_permission TINYINT(1) NOT NULL" + //is admin or not
-                "); " +
+            "CREATE TABLE IF NOT EXISTS users (" +
+                    "id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    "name TEXT," +
+                    "username VARCHAR(255) NOT NULL UNIQUE," +
+                    "pfp LONGBLOB DEFAULT NULL," +
+                    "email VARCHAR(255) NOT NULL UNIQUE," +
+                    "password VARCHAR(255) NOT NULL," +
+                    "user_permission TINYINT(1) NOT NULL" + //is admin or not
+                    "); " +
 
-                "CREATE TABLE IF NOT EXISTS tasks (" +
-                        "id INTEGER PRIMARY KEY AUTOINCREMENT," +
-                        "title VARCHAR(255) NOT NULL," +
-                        "description TEXT," +
-                        "date_created DATETIME DEFAULT now()," +
-                        "date_finished DATETIME DEFAULT null" +
-                        "percent_done INTEGER NOT NULL DEFAULT 0," +
-                        "DATETIME DEFAULT null" +
-                        "status TINYINT(1) NOT NULL," +
-                        "category TEXT NOT NULL," +
-                        "project_id INTEGER NOT NULL" +
-                        "FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE," +
-                "); " +
+                    "CREATE TABLE IF NOT EXISTS tasks (" +
+                    "id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    "title VARCHAR(255) NOT NULL," +
+                    "description TEXT," +
+                    "date_created DATETIME DEFAULT now()," +
+                    "date_finished DATETIME DEFAULT null" +
+                    "percent_done INTEGER NOT NULL DEFAULT 0," +
+                    "DATETIME DEFAULT null" +
+                    "status TINYINT(1) NOT NULL," +
+                    "category TEXT NOT NULL," +
+                    "project_id INTEGER NOT NULL" +
+                    "FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE," +
+                    "); " +
 
-                "CREATE TABLE IF NOT EXISTS projects (" +
-                        "id INTEGER PRIMARY KEY AUTOINCREMENT," +
-                        "title VARCHAR(255) UNIQUE," +
-                        "description TEXT," +
-                        "date_created DATETIME DEFAULT now()," +
-                        "status TINYINT(1) NOT NULL," + // is manager or not
-                        "category TEXT" +
-                "); " +
+                    "CREATE TABLE IF NOT EXISTS projects (" +
+                    "id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    "title VARCHAR(255) UNIQUE," +
+                    "description TEXT," +
+                    "date_created DATETIME DEFAULT now()," +
+                    "status TINYINT(1) NOT NULL," + // is manager or not
+                    "category TEXT" +
+                    "); " +
 
-                "CREATE TABLE IF NOT EXISTS member_list (" +
-                        "id INTEGER PRIMARY KEY AUTOINCREMENT," +
-                        "user_id INTEGER NOT NULL," +
-                        "project_id INTEGER NOT NULL," +
-                        "user_permissions TINYINT(1) NOT NULL," +
-                        "FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE," +
-                        "FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE," +
-                "); " +
+                    "CREATE TABLE IF NOT EXISTS member_list (" +
+                    "id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    "user_id INTEGER NOT NULL," +
+                    "project_id INTEGER NOT NULL," +
+                    "user_permissions TINYINT(1) NOT NULL," +
+                    "FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE," +
+                    "FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE," +
+                    "); " +
 
-                "CREATE TABLE IF NOT EXISTS task_list (" +
-                        "id INTEGER PRIMARY KEY AUTOINCREMENT," +
-                        "task_id INTEGER NOT NULL," +
-                        "user_id INTEGER ," +
-                        "FOREIGNKEY (task_id) REFERENCES tasks(id) ON DELETE CASCADE," +
-                        "FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE," +
-                        "UNIQUE(task_id, user_id) "+
-                "); " +
+                    "CREATE TABLE IF NOT EXISTS task_list (" +
+                    "id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    "task_id INTEGER NOT NULL," +
+                    "user_id INTEGER ," +
+                    "FOREIGNKEY (task_id) REFERENCES tasks(id) ON DELETE CASCADE," +
+                    "FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE," +
+                    "UNIQUE(task_id, user_id) " +
+                    "); " +
 
-                "CREATE TABLE IF NOT EXISTS commits (" +
-                        "id INTEGER PRIMARY KEY AUTOINCREMENT," +
-                        "task_list_id INTEGER NOT NULL," +
-                        "date DATETIME DEFAULT now()," +
-                        "description TEXT," +
-                        "percentage_done INTEGER NOT NULL," +
-                        "FOREIGN KEY (task_list_id) REFERENCES task_list(id) ON DELETE CASCADE" +
-                "); "
+                    "CREATE TABLE IF NOT EXISTS commits (" +
+                    "id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    "task_list_id INTEGER NOT NULL," +
+                    "date DATETIME DEFAULT now()," +
+                    "description TEXT," +
+                    "percentage_done INTEGER NOT NULL," +
+                    "FOREIGN KEY (task_list_id) REFERENCES task_list(id) ON DELETE CASCADE" +
+                    "); "
 
         db?.execSQL(createDatabase)
     }
@@ -92,7 +94,7 @@ class DatabaseHelper(context: Context) :
 
     fun insertUser(user: User) {
         val db = writableDatabase
-        val values = ContentValues().apply{
+        val values = ContentValues().apply {
             put("name", user.name)
             put("username", user.username)
             put("pfp", user.pfp)
@@ -100,12 +102,13 @@ class DatabaseHelper(context: Context) :
             put("password", user.password)
             put("user_permission", user.userPermission)
         }
-        db.insert("users" , null , values)
+        db.insert("users", null, values)
         db.close()
     }
+
     fun insertTask(task: Task) {
         val db = writableDatabase
-        val values = ContentValues().apply{
+        val values = ContentValues().apply {
             put("title", task.title)
             put("description", task.description)
             put("date_created", task.dateCreated)
@@ -120,43 +123,52 @@ class DatabaseHelper(context: Context) :
 
     fun insertProject(project: Project) {
         val db = writableDatabase
-        val values = ContentValues().apply{
+        val values = ContentValues().apply {
             put("title", project.title)
             put("description", project.description)
             put("date_created", project.date)
             put("status", project.status)
             put("category", project.category)
         }
-        db.insert("projects" , null , values)
+        db.insert("projects", null, values)
         db.close()
     }
 
-////------------------------------------------ READ --------------------------------------------////
-    fun checkUserCredentials(username: String, password: String): User?{
-    val db = readableDatabase
-    val query = "SELECT * FROM users WHERE username = $username"
-    val cursor = db.rawQuery(query, null)
-    val empty_user = null
-    if (cursor.moveToFirst()) {
-        val db_user = User(
-            cursor.getInt(cursor.getColumnIndexOrThrow("id")),
-            cursor.getString(cursor.getColumnIndexOrThrow("name")),
-            cursor.getString(cursor.getColumnIndexOrThrow("username")),
-            cursor.getBlob(cursor.getColumnIndexOrThrow("pfp")),
-            cursor.getString(cursor.getColumnIndexOrThrow("email")),
-            cursor.getString(cursor.getColumnIndexOrThrow("password")),
-            cursor.getInt(cursor.getColumnIndexOrThrow("user_permission"))
-        )
-        cursor.close()
-        db.close()
-        if(password != db_user.password){
-            return empty_user
+    ////------------------------------------------ READ --------------------------------------------////
+    fun checkUserCredentials(username: String, password: String): User? {
+        val db = readableDatabase
+        val query = "SELECT * FROM users WHERE username = $username"
+        val cursor = db.rawQuery(query, null)
+        val empty_user = null
+        if (cursor.moveToFirst()) {
+            val db_user = User(
+                cursor.getInt(cursor.getColumnIndexOrThrow("id")),
+                cursor.getString(cursor.getColumnIndexOrThrow("name")),
+                cursor.getString(cursor.getColumnIndexOrThrow("username")),
+                cursor.getBlob(cursor.getColumnIndexOrThrow("pfp")),
+                cursor.getString(cursor.getColumnIndexOrThrow("email")),
+                cursor.getString(cursor.getColumnIndexOrThrow("password")),
+                cursor.getInt(cursor.getColumnIndexOrThrow("user_permission"))
+            )
+            cursor.close()
+            db.close()
+            if (password != db_user.password) {
+                return empty_user
+            }
+            return getUserPublic(db_user.id)
         }
-        return getUserPublic(db_user.id)
+        db.close()
+        return empty_user
     }
-    db.close()
-    return empty_user
-   }
+
+    private fun checkUsernameUniqueness(username: String): Boolean {
+        val db = readableDatabase
+        val query = "SELECT * FROM users WHERE username = $username"
+        val cursor = db.rawQuery(query, null)
+        if (cursor.moveToFirst()) return false
+        db.close()
+        return true //username is unique
+    }
 
     fun getUserPublic(id: Int): User? {
         val db = readableDatabase
@@ -171,6 +183,29 @@ class DatabaseHelper(context: Context) :
                 cursor.getBlob(cursor.getColumnIndexOrThrow("pfp")),
                 cursor.getString(cursor.getColumnIndexOrThrow("email")),
                 password = "",
+                cursor.getInt(cursor.getColumnIndexOrThrow("user_permission"))
+            )
+            cursor.close()
+            db.close()
+            return db_user
+        }
+        db.close()
+        return empty_user
+    }
+
+    fun getUser(id: Int): User? {
+        val db = readableDatabase
+        val query = "SELECT * FROM users WHERE id = $id"
+        val cursor = db.rawQuery(query, null)
+        val empty_user = null
+        if (cursor.moveToFirst()) {
+            val db_user = User(
+                cursor.getInt(cursor.getColumnIndexOrThrow("id")),
+                cursor.getString(cursor.getColumnIndexOrThrow("name")),
+                cursor.getString(cursor.getColumnIndexOrThrow("username")),
+                cursor.getBlob(cursor.getColumnIndexOrThrow("pfp")),
+                cursor.getString(cursor.getColumnIndexOrThrow("email")),
+                cursor.getString(cursor.getColumnIndexOrThrow("password")),
                 cursor.getInt(cursor.getColumnIndexOrThrow("user_permission"))
             )
             cursor.close()
@@ -198,7 +233,7 @@ class DatabaseHelper(context: Context) :
                 cursor.getString(cursor.getColumnIndexOrThrow("category")),
                 cursor.getInt(cursor.getColumnIndexOrThrow("project_id")),
 
-            )
+                )
             cursor.close()
             db.close()
             return db_task
@@ -207,7 +242,7 @@ class DatabaseHelper(context: Context) :
         return empty_task
     }
 
-    fun getCommit(id: Int):  Commit?{
+    fun getCommit(id: Int): Commit? {
         val db = readableDatabase
         val query = "SELECT * FROM task_commits WHERE id = $id"
         val cursor = db.rawQuery(query, null)
@@ -227,7 +262,7 @@ class DatabaseHelper(context: Context) :
         return empty_commit
     }
 
-    fun getAllUsers(): List<User>{
+    fun getAllUsers(): List<User> {
         val db = readableDatabase
         var db_users = mutableListOf<User>()
         val query = "SELECT * FROM users"
@@ -249,13 +284,17 @@ class DatabaseHelper(context: Context) :
         return db_users
     }
 
-    fun getProjectUsers(project_id: Int): List<User>{
+    fun getProjectUsers(project_id: Int): List<User> {
         val db = readableDatabase
         val proj_users = mutableListOf<User>()
         val query = "SELECT * FROM member_list WHERE project_id = $project_id"
         val cursor = db.rawQuery(query, null)
         while (cursor.moveToNext()) {
-            getUserPublic(cursor.getInt(cursor.getColumnIndexOrThrow("user_id")))?.let { proj_users.add(it) }
+            getUserPublic(cursor.getInt(cursor.getColumnIndexOrThrow("user_id")))?.let {
+                proj_users.add(
+                    it
+                )
+            }
         }
         cursor.close()
         db.close()
@@ -264,16 +303,16 @@ class DatabaseHelper(context: Context) :
 
     // if true user is editor if not user is a normal user or an admin if they are an admin
     // this function will be ignored
-    fun getProjectPermissions(projectId: Int, userId: Int): Boolean{
+    fun getProjectPermissions(projectId: Int, userId: Int): Boolean {
         val db = readableDatabase
         var userPermissions: Boolean = false
         val query = "SELECT * FROM member_list WHERE project_id = $projectId AND user_id = $userId"
         val cursor = db.rawQuery(query, null)
         while (cursor.moveToFirst()) {
             val permission = cursor.getInt(cursor.getColumnIndexOrThrow("user_permissions"))
-            if(permission == 0){
+            if (permission == 0) {
                 userPermissions = false
-            }else{
+            } else {
                 userPermissions = true
             }
         }
@@ -282,26 +321,30 @@ class DatabaseHelper(context: Context) :
         return userPermissions
     }
 
-    fun getTaskUsers(task_id: Int): List<User>{
+    fun getTaskUsers(task_id: Int): List<User> {
         val db = readableDatabase
         val task_users = mutableListOf<User>()
         val query = "SELECT * FROM task_list WHERE task_id = $task_id"
         val cursor = db.rawQuery(query, null)
         while (cursor.moveToNext()) {
-            getUserPublic(cursor.getInt(cursor.getColumnIndexOrThrow("user_id")))?.let { task_users.add(it) }
+            getUserPublic(cursor.getInt(cursor.getColumnIndexOrThrow("user_id")))?.let {
+                task_users.add(
+                    it
+                )
+            }
         }
         cursor.close()
         db.close()
         return task_users
     }
 
-    fun getProjectTasks(project_id: Int): List<Task>{
+    fun getProjectTasks(project_id: Int): List<Task> {
         val db = readableDatabase
         val proj_tasks = mutableListOf<Task>()
         val query = "SELECT * FROM tasks WHERE project_id = $project_id"
         val cursor = db.rawQuery(query, null)
         while (cursor.moveToNext()) {
-            val proj_task = Task (
+            val proj_task = Task(
                 cursor.getInt(cursor.getColumnIndexOrThrow("id")),
                 cursor.getString(cursor.getColumnIndexOrThrow("string")),
                 cursor.getString(cursor.getColumnIndexOrThrow("description")),
@@ -319,13 +362,17 @@ class DatabaseHelper(context: Context) :
         return proj_tasks
     }
 
-    fun getCommits(tasklist_id: Int): List<Commit>{
+    fun getCommits(tasklist_id: Int): List<Commit> {
         val db = readableDatabase
         val task_commits = mutableListOf<Commit>()
         val query = "SELECT * FROM task_list WHERE task_list_id = $tasklist_id"
         val cursor = db.rawQuery(query, null)
         while (cursor.moveToNext()) {
-            getCommit(cursor.getInt(cursor.getColumnIndexOrThrow("task_id")))?.let { task_commits.add(it) }
+            getCommit(cursor.getInt(cursor.getColumnIndexOrThrow("task_id")))?.let {
+                task_commits.add(
+                    it
+                )
+            }
         }
         cursor.close()
         db.close()
@@ -343,9 +390,11 @@ class DatabaseHelper(context: Context) :
             val tasklist_cursor = db.rawQuery(tasklist_query, null)
             val task_commits = kotlin.collections.mutableListOf<Commit>()
             val task_users = mutableListOf<User>()
-            while(tasklist_cursor.moveToNext()){
-                val user_id = tasklist_cursor.getInt(tasklist_cursor.getColumnIndexOrThrow("user_id"))
-                val tasklist_id = tasklist_cursor.getInt(tasklist_cursor.getColumnIndexOrThrow("id"))
+            while (tasklist_cursor.moveToNext()) {
+                val user_id =
+                    tasklist_cursor.getInt(tasklist_cursor.getColumnIndexOrThrow("user_id"))
+                val tasklist_id =
+                    tasklist_cursor.getInt(tasklist_cursor.getColumnIndexOrThrow("id"))
                 val user = getUserPublic(user_id)
                 if (user != null) {
                     task_users.add(user)
@@ -369,7 +418,7 @@ class DatabaseHelper(context: Context) :
         return proj_commits
     }
 
-    fun getUserCommitsFromTask(user_id: Int, task_id: Int): List<Commit>{
+    fun getUserCommitsFromTask(user_id: Int, task_id: Int): List<Commit> {
         val db = readableDatabase
         val user_commits = mutableListOf<Commit>()
         val query = "SELECT * FROM task_list WHERE user_id = $user_id AND task_id = $task_id"
@@ -384,7 +433,7 @@ class DatabaseHelper(context: Context) :
         return user_commits
     }
 
-    fun getUserCommitsFromProject(user_id: Int, project_id: Int): List<Commit>{
+    fun getUserCommitsFromProject(user_id: Int, project_id: Int): List<Commit> {
         val db = readableDatabase
         val user_commits = mutableListOf<Commit>()
         val query = "SELECT * FROM tasks WHERE project_id = $project_id"
@@ -399,11 +448,81 @@ class DatabaseHelper(context: Context) :
         return user_commits
     }
 
-////----------------------------------------- UPDATE -------------------------------------------////
-    fun updateUser(user: User){
+    ////----------------------------------------- UPDATE -------------------------------------------////
+    fun updateUser(user: User, userId: Int, context: Context): Any {
         val db = readableDatabase
-        val values = ContentValues().apply {
+        val originalUser = getUser(userId)
+        var name: String? = null
+        var username: String? = null
+        var pfp: ByteArray? = null
+        var email: String? = null
+        var password: String? = null
+        var permission: Int? = null
+        if (originalUser != null) {
+            name = if (user.name.trim() != originalUser.name.trim() && user.name.isNotEmpty()) {
+                user.name.trim()
+            } else {
+                originalUser.name
+            }
 
+            username =
+                if (user.username.trim() != originalUser.username.trim() && user.username.isNotEmpty()) {
+                    if (!checkUsernameUniqueness(user.username)) {
+                        return context.getString(R.string.user_update_error_username_not_unique)
+                    }
+                    user.username.trim()
+                } else {
+                    originalUser.username
+                }
+
+            pfp = if (!user.pfp.contentEquals(originalUser.pfp) && user.pfp.isNotEmpty()) {
+                user.pfp
+            } else {
+                originalUser.pfp
+            }
+
+            email = if (user.email.trim() != originalUser.email.trim() && user.email.isNotEmpty()) {
+                user.email.trim()
+            } else {
+                originalUser.email
+            }
+
+            password = if (user.password.trim() != originalUser.password.trim() && user.password.isNotEmpty()) {
+                user.password.trim()
+            } else {
+                originalUser.password
+            }
+
+            if (user.userPermission != originalUser.userPermission) {
+                permission = if (user.userPermission in 1 downTo 0) {
+                    user.userPermission
+                } else {
+                    originalUser.userPermission
+                }
+            }
+
+        } else {
+            return context.getString(R.string.user_update_user_not_exists);
         }
+
+        val values = ContentValues().apply {
+            put("name", name)
+            put("username", username)
+            put("pfp", pfp)
+            put("email", email)
+            put("password", password)
+            put("permission", permission)
+        }
+
+        val success = db.update("users", values, "id = ?", arrayOf(userId.toString()))
+        db.close()
+        return if(success > 0){
+            context.getString(R.string.user_update_success_start) +
+                    username +
+                    context.getString(R.string.user_update_success_end)
+        } else {
+            context.getString(R.string.user_update_error_update_failure)
+        }
+
     }
 }
