@@ -663,4 +663,43 @@ class DatabaseHelper(context: Context) :
             context.getString(R.string.task_update_error_update_failure)
         }
     }
+
+    fun updateCommit(commit: Commit, commitId: Int, context: Context): String{
+        val db = readableDatabase
+        val originalCommit = getCommit(commitId)
+        var description: String? = null
+        var points: Int? = null
+
+        if (originalCommit != null) {
+            description =
+                if (commit.description.trim() != originalCommit.description.trim() && commit.description.isNotEmpty()) {
+                    commit.description.trim()
+                } else {
+                    commit.description
+                }
+            points = if (commit.points > 0) {
+                commit.points
+            } else {
+                originalCommit.points
+            }
+
+        } else {
+            return context.getString(R.string.commit_update_task_not_exists);
+        }
+
+        val values = ContentValues().apply {
+            put("description", description)
+            put("points", points)
+        }
+
+        val success = db.update("commits", values, "id = ?", arrayOf(commitId.toString()))
+        db.close()
+        return if (success > 0) {
+            context.getString(R.string.commit_update_success_start) +
+                    originalCommit.id +
+                    context.getString(R.string.commit_update_success_end)
+        } else {
+            context.getString(R.string.commit_update_error_update_failure)
+        }
+    }
 }

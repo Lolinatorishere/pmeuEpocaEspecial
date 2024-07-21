@@ -20,4 +20,7 @@
     <string name="task_update_success_start">Tarefa</string>
     <string name="task_update_success_end">" Foi Atualizado com Sucesso"</string>
     <string name="task_update_error_update_failure">Erro ao Atualizar a Tarefa Tente novamente mais tarde</string>
+    <string name="commit_update_task_not_exists">Commit Não Existe</string>
+    <string name="commit_update_success_end">" Foi Atualizado com Sucesso"</string>
+    <string name="commit_update_error_update_failure">Erro ao Atualizar o Commit Tente novamente mais tarde</string>
 </resources>
