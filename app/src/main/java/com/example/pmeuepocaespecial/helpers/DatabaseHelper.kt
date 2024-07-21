@@ -56,6 +56,7 @@ class DatabaseHelper(context: Context) :
                     "user_permissions TINYINT(1) NOT NULL," +
                     "FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE," +
                     "FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE," +
+                    "UNIQUE(user_id, project_id)" +
                     "); " +
 
                     "CREATE TABLE IF NOT EXISTS task_list (" +
@@ -78,6 +79,7 @@ class DatabaseHelper(context: Context) :
 
         db?.execSQL(createDatabase)
     }
+
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
         val dropDatabase = "DROP TABLE IF EXISTS users; " +
                 "DROP TABLE IF EXISTS tasks; " +
@@ -168,6 +170,7 @@ class DatabaseHelper(context: Context) :
         db.close()
         return true //username is unique
     }
+
     private fun checkTitleUniqueness(title: String): Boolean {
         val db = readableDatabase
         val query = "SELECT * FROM projects WHERE title = $title"
@@ -245,7 +248,7 @@ class DatabaseHelper(context: Context) :
         return emptyProject
     }
 
-        fun getTask(id: Int): Task? {
+    fun getTask(id: Int): Task? {
         val db = readableDatabase
         val query = "SELECT * FROM tasks WHERE id = $id"
         val cursor = db.rawQuery(query, null)
@@ -478,6 +481,7 @@ class DatabaseHelper(context: Context) :
     }
 
     ////----------------------------------------- UPDATE -------------------------------------------////
+
     fun updateUser(user: User, userId: Int, context: Context): Any {
         val db = readableDatabase
         val originalUser = getUser(userId)
@@ -516,11 +520,12 @@ class DatabaseHelper(context: Context) :
                 originalUser.email
             }
 
-            password = if (user.password.trim() != originalUser.password.trim() && user.password.isNotEmpty()) {
-                user.password.trim()
-            } else {
-                originalUser.password
-            }
+            password =
+                if (user.password.trim() != originalUser.password.trim() && user.password.isNotEmpty()) {
+                    user.password.trim()
+                } else {
+                    originalUser.password
+                }
 
             if (user.userPermission != originalUser.userPermission) {
                 permission = if (user.userPermission in 1 downTo 0) {
@@ -545,7 +550,7 @@ class DatabaseHelper(context: Context) :
 
         val success = db.update("users", values, "id = ?", arrayOf(userId.toString()))
         db.close()
-        return if(success > 0){
+        return if (success > 0) {
             context.getString(R.string.user_update_success_start) +
                     username +
                     context.getString(R.string.user_update_success_end)
@@ -554,7 +559,7 @@ class DatabaseHelper(context: Context) :
         }
     }
 
-    fun updateProject(project: Project, projectId: Int, context: Context): String{
+    fun updateProject(project: Project, projectId: Int, context: Context): String {
         val db = readableDatabase
         val originalProject = getProject(projectId)
         var title: String? = null
@@ -563,14 +568,15 @@ class DatabaseHelper(context: Context) :
         var category: String? = null
         if (originalProject != null) {
 
-            title = if (project.title.trim() != originalProject.title.trim() && project.title.isNotEmpty()) {
-                if (!checkTitleUniqueness(project.title)) {
-                    return context.getString(R.string.project_update_error_title_not_unique)
+            title =
+                if (project.title.trim() != originalProject.title.trim() && project.title.isNotEmpty()) {
+                    if (!checkTitleUniqueness(project.title)) {
+                        return context.getString(R.string.project_update_error_title_not_unique)
+                    }
+                    project.title.trim()
+                } else {
+                    originalProject.title
                 }
-                project.title.trim()
-            } else {
-                originalProject.title
-            }
 
             description =
                 if (project.description.trim() != originalProject.description.trim() && project.description.isNotEmpty()) {
@@ -587,11 +593,12 @@ class DatabaseHelper(context: Context) :
                 }
             }
 
-            category = if(project.category != originalProject.category && project.category.isNotEmpty()){
-                project.category.trim()
-            }else{
-                originalProject.category
-            }
+            category =
+                if (project.category != originalProject.category && project.category.isNotEmpty()) {
+                    project.category.trim()
+                } else {
+                    originalProject.category
+                }
 
         } else {
             return context.getString(R.string.project_update_project_not_exists);
@@ -606,7 +613,7 @@ class DatabaseHelper(context: Context) :
 
         val success = db.update("projects", values, "id = ?", arrayOf(projectId.toString()))
         db.close()
-        return if(success > 0){
+        return if (success > 0) {
             context.getString(R.string.project_update_success_start) +
                     title +
                     context.getString(R.string.project_update_success_end)
@@ -664,7 +671,7 @@ class DatabaseHelper(context: Context) :
         }
     }
 
-    fun updateCommit(commit: Commit, commitId: Int, context: Context): String{
+    fun updateCommit(commit: Commit, commitId: Int, context: Context): String {
         val db = readableDatabase
         val originalCommit = getCommit(commitId)
         var description: String? = null
@@ -702,4 +709,55 @@ class DatabaseHelper(context: Context) :
             context.getString(R.string.commit_update_error_update_failure)
         }
     }
+
+////----------------------------------------- DELETE -------------------------------------------////
+
+    fun deleteUser(userId: Int): Int {
+        val db = writableDatabase
+        val whereArgs = arrayOf(userId.toString())
+        val deletedRows = db.delete("users", "id = ?", whereArgs)
+        db.close()
+        return deletedRows // Number of rows deleted
+    }
+
+    fun deleteProject(projectId: Int): Int {
+        val db = writableDatabase
+        val whereArgs = arrayOf(projectId.toString())
+        val deletedRows = db.delete("projects", "id = ?", whereArgs)
+        db.close()
+        return deletedRows // Number of rows deleted
+    }
+
+    fun deleteTask(taskId: Int): Int {
+        val db = writableDatabase
+        val whereArgs = arrayOf(taskId.toString())
+        val deletedRows = db.delete("tasks", "id = ?", whereArgs)
+        db.close()
+        return deletedRows // Number of rows deleted
+    }
+
+    fun deleteCommit(commitId: Int): Int {
+        val db = writableDatabase
+        val whereArgs = arrayOf(commitId.toString())
+        val deletedRows = db.delete("commits", "id = ?", whereArgs)
+        db.close()
+        return deletedRows // Number of rows deleted
+    }
+
+    fun removeUserFromProject(userId: Int, projectId: Int): Int{
+        val db = writableDatabase
+        val whereArgs = arrayOf(userId.toString(), projectId.toString())
+        val deletedRows = db.delete("member_list", "user_id = ? AND project_id = ? ", whereArgs)
+        db.close()
+        return deletedRows // Number of rows deleted
+    }
+
+    fun removeUserFromTask(userId: Int, taskId: Int): Int{
+        val db = writableDatabase
+        val whereArgs = arrayOf(userId.toString(), taskId.toString())
+        val deletedRows = db.delete("task_list", "user_id = ? AND task_id = ? ", whereArgs)
+        db.close()
+        return deletedRows // Number of rows deleted
+    }
+
 }
