@@ -28,11 +28,11 @@ class DatabaseHelper(context: Context) :
 
                     "CREATE TABLE IF NOT EXISTS tasks (" +
                     "id INTEGER PRIMARY KEY AUTOINCREMENT," +
-                    "title VARCHAR(255) NOT NULL," +
+                    "title VARCHAR(255) NOT NULL UNIQUE," +
                     "description TEXT," +
                     "date_created DATETIME DEFAULT now()," +
                     "date_finished DATETIME DEFAULT null" +
-                    "percent_done INTEGER NOT NULL DEFAULT 0," +
+                    "points INTEGER NOT NULL DEFAULT 0," +
                     "DATETIME DEFAULT null" +
                     "status TINYINT(1) NOT NULL," +
                     "category TEXT NOT NULL," +
@@ -72,13 +72,12 @@ class DatabaseHelper(context: Context) :
                     "task_list_id INTEGER NOT NULL," +
                     "date DATETIME DEFAULT now()," +
                     "description TEXT," +
-                    "percentage_done INTEGER NOT NULL," +
+                    "point_value INTEGER NOT NULL," +
                     "FOREIGN KEY (task_list_id) REFERENCES task_list(id) ON DELETE CASCADE" +
                     "); "
 
         db?.execSQL(createDatabase)
     }
-
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
         val dropDatabase = "DROP TABLE IF EXISTS users; " +
                 "DROP TABLE IF EXISTS tasks; " +
@@ -169,7 +168,6 @@ class DatabaseHelper(context: Context) :
         db.close()
         return true //username is unique
     }
-
     private fun checkTitleUniqueness(title: String): Boolean {
         val db = readableDatabase
         val query = "SELECT * FROM projects WHERE title = $title"
@@ -596,7 +594,7 @@ class DatabaseHelper(context: Context) :
             }
 
         } else {
-            return context.getString(R.string.user_update_project_not_exists);
+            return context.getString(R.string.project_update_project_not_exists);
         }
 
         val values = ContentValues().apply {
@@ -617,4 +615,52 @@ class DatabaseHelper(context: Context) :
         }
     }
 
+    fun updateTask(task: Task, taskId: Int, context: Context): String {
+        val db = readableDatabase
+        val originalTask = getTask(taskId)
+        var title: String? = null
+        var description: String? = null
+        var category: String? = null
+
+        if (originalTask != null) {
+            title = if (task.title.trim() != task.title.trim() && task.title.isNotEmpty()) {
+                task.title.trim()
+            } else {
+                originalTask.title
+            }
+
+            description =
+                if (task.description.trim() != originalTask.description.trim() && task.description.isNotEmpty()) {
+                    task.description.trim()
+                } else {
+                    task.description
+                }
+
+
+            category = if (task.category != originalTask.category && task.category.isNotEmpty()) {
+                task.category.trim()
+            } else {
+                originalTask.category
+            }
+
+        } else {
+            return context.getString(R.string.task_update_task_not_exists);
+        }
+
+        val values = ContentValues().apply {
+            put("title", title)
+            put("description", description)
+            put("category", category)
+        }
+
+        val success = db.update("tasks", values, "id = ?", arrayOf(taskId.toString()))
+        db.close()
+        return if (success > 0) {
+            context.getString(R.string.task_update_success_start) +
+                    title +
+                    context.getString(R.string.task_update_success_end)
+        } else {
+            context.getString(R.string.task_update_error_update_failure)
+        }
+    }
 }

@@ -49,7 +49,7 @@
     <string name="user_permission_admin" translatable="false"> Admin </string>
 
     <string name="user_update_user_not_exists" > User Does Not Exist </string>
-    <string name="user_update_project_not_exists">Project Does Not Exist</string>
+    <string name="project_update_project_not_exists">Project Does Not Exist</string>
 
     <string name="user_update_success_start"> User </string>
     <string name="user_update_success_end" > Has Been Successfully Updated </string>
@@ -60,5 +60,11 @@
     <string name="project_update_success_start">"Project "</string>
     <string name="project_update_success_end"> Has Been Successfully Updated</string>
     <string name="project_update_error_update_failure">There was an error Updating the Project</string>
+    <string name="task_update_task_not_exists">Task Does not Exist</string>
+    <string name="task_update_success_start">Task </string>
+    <string name="task_update_success_end"> Has Been Successfully Updated</string>
+    <string name="task_update_error_update_failure">There was an error Updating the Task</string>
+
+
 
 </resources>

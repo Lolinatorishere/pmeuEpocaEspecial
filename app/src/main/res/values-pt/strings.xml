@@ -7,7 +7,6 @@
     <string name="user_permission_user">Utilizador</string>
     <string name="user_permission_manager">Gerente</string>
     <string name="user_update_user_not_exists">Utilizador Não Existe</string>
-    <string name="user_update_project_not_exists">Projeto Não Existe</string>
     <string name="user_update_success_start">"Utilizador "</string>
     <string name="user_update_success_end">" Foi Atualizado com Sucesso"</string>
     <string name="user_update_error_username_not_unique">Username Inserido Invalido</string>
@@ -16,4 +15,9 @@
     <string name="project_update_success_start">Projeto</string>
     <string name="project_update_success_end">" Foi Atualizado com Sucesso"</string>
     <string name="project_update_error_update_failure">Erro ao Atualizar o Projeto Tente novamente mais tarde</string>
+    <string name="project_update_project_not_exists">Projeto Não Existe</string>
+    <string name="task_update_task_not_exists">Tarefa Não Existe</string>
+    <string name="task_update_success_start">Tarefa</string>
+    <string name="task_update_success_end">" Foi Atualizado com Sucesso"</string>
+    <string name="task_update_error_update_failure">Erro ao Atualizar a Tarefa Tente novamente mais tarde</string>
 </resources>
