@@ -50,10 +50,10 @@ class DatabaseHelper(context: Context) :
                 "CREATE TABLE IF NOT EXISTS member_list (" +
                         "id INTEGER PRIMARY KEY AUTOINCREMENT," +
                         "user_id INTEGER NOT NULL," +
-                        "user_id INTEGER NOT NULL," +
+                        "project_id INTEGER NOT NULL," +
                         "user_permissions TINYINT(1) NOT NULL," +
                         "FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE," +
-                        "FOREIGN KEY (group_id) REFERENCES member_list(id) ON DELETE CASCADE," +
+                        "FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE," +
                 "); " +
 
                 "CREATE TABLE IF NOT EXISTS task_list (" +
@@ -132,11 +132,37 @@ class DatabaseHelper(context: Context) :
     }
 
 ////------------------------------------------ READ --------------------------------------------////
+    fun checkUserCredentials(username: String, password: String): User?{
+    val db = readableDatabase
+    val query = "SELECT * FROM users WHERE username = $username"
+    val cursor = db.rawQuery(query, null)
+    val empty_user = null
+    if (cursor.moveToFirst()) {
+        val db_user = User(
+            cursor.getInt(cursor.getColumnIndexOrThrow("id")),
+            cursor.getString(cursor.getColumnIndexOrThrow("name")),
+            cursor.getString(cursor.getColumnIndexOrThrow("username")),
+            cursor.getBlob(cursor.getColumnIndexOrThrow("pfp")),
+            cursor.getString(cursor.getColumnIndexOrThrow("email")),
+            cursor.getString(cursor.getColumnIndexOrThrow("password")),
+            cursor.getInt(cursor.getColumnIndexOrThrow("user_permission"))
+        )
+        cursor.close()
+        db.close()
+        if(password != db_user.password){
+            return empty_user
+        }
+        return getUserPublic(db_user.id)
+    }
+    db.close()
+    return empty_user
+   }
+
     fun getUserPublic(id: Int): User? {
         val db = readableDatabase
         val query = "SELECT * FROM users WHERE id = $id"
-        val cursor = db.rawQuery(query, null);
-        val empty_user = null;
+        val cursor = db.rawQuery(query, null)
+        val empty_user = null
         if (cursor.moveToFirst()) {
             val db_user = User(
                 cursor.getInt(cursor.getColumnIndexOrThrow("id")),
@@ -158,8 +184,8 @@ class DatabaseHelper(context: Context) :
     fun getTask(id: Int): Task? {
         val db = readableDatabase
         val query = "SELECT * FROM tasks WHERE id = $id"
-        val cursor = db.rawQuery(query, null);
-        val empty_task = null;
+        val cursor = db.rawQuery(query, null)
+        val empty_task = null
         if (cursor.moveToFirst()) {
             val db_task = Task(
                 cursor.getInt(cursor.getColumnIndexOrThrow("id")),
@@ -184,8 +210,8 @@ class DatabaseHelper(context: Context) :
     fun getCommit(id: Int):  Commit?{
         val db = readableDatabase
         val query = "SELECT * FROM task_commits WHERE id = $id"
-        val cursor = db.rawQuery(query, null);
-        val empty_commit = null;
+        val cursor = db.rawQuery(query, null)
+        val empty_commit = null
         if (cursor.moveToFirst()) {
             val db_commit = Commit(
                 cursor.getInt(cursor.getColumnIndexOrThrow("id")),
@@ -205,7 +231,7 @@ class DatabaseHelper(context: Context) :
         val db = readableDatabase
         var db_users = mutableListOf<User>()
         val query = "SELECT * FROM users"
-        val cursor = db.rawQuery(query, null);
+        val cursor = db.rawQuery(query, null)
         while (cursor.moveToNext()) {
             val db_user = User(
                 cursor.getInt(cursor.getColumnIndexOrThrow("id")),
@@ -227,33 +253,53 @@ class DatabaseHelper(context: Context) :
         val db = readableDatabase
         val proj_users = mutableListOf<User>()
         val query = "SELECT * FROM member_list WHERE project_id = $project_id"
-        val cursor = db.rawQuery(query, null);
+        val cursor = db.rawQuery(query, null)
         while (cursor.moveToNext()) {
             getUserPublic(cursor.getInt(cursor.getColumnIndexOrThrow("user_id")))?.let { proj_users.add(it) }
         }
         cursor.close()
         db.close()
-        return proj_users;
+        return proj_users
+    }
+
+    // if true user is editor if not user is a normal user or an admin if they are an admin
+    // this function will be ignored
+    fun getProjectPermissions(projectId: Int, userId: Int): Boolean{
+        val db = readableDatabase
+        var userPermissions: Boolean = false
+        val query = "SELECT * FROM member_list WHERE project_id = $projectId AND user_id = $userId"
+        val cursor = db.rawQuery(query, null)
+        while (cursor.moveToFirst()) {
+            val permission = cursor.getInt(cursor.getColumnIndexOrThrow("user_permissions"))
+            if(permission == 0){
+                userPermissions = false
+            }else{
+                userPermissions = true
+            }
+        }
+        cursor.close()
+        db.close()
+        return userPermissions
     }
 
     fun getTaskUsers(task_id: Int): List<User>{
         val db = readableDatabase
         val task_users = mutableListOf<User>()
         val query = "SELECT * FROM task_list WHERE task_id = $task_id"
-        val cursor = db.rawQuery(query, null);
+        val cursor = db.rawQuery(query, null)
         while (cursor.moveToNext()) {
             getUserPublic(cursor.getInt(cursor.getColumnIndexOrThrow("user_id")))?.let { task_users.add(it) }
         }
         cursor.close()
         db.close()
-        return task_users;
+        return task_users
     }
 
     fun getProjectTasks(project_id: Int): List<Task>{
         val db = readableDatabase
         val proj_tasks = mutableListOf<Task>()
         val query = "SELECT * FROM tasks WHERE project_id = $project_id"
-        val cursor = db.rawQuery(query, null);
+        val cursor = db.rawQuery(query, null)
         while (cursor.moveToNext()) {
             val proj_task = Task (
                 cursor.getInt(cursor.getColumnIndexOrThrow("id")),
@@ -266,24 +312,24 @@ class DatabaseHelper(context: Context) :
                 cursor.getString(cursor.getColumnIndexOrThrow("category")),
                 cursor.getInt(cursor.getColumnIndexOrThrow("project_id"))
             )
-            proj_tasks.add(proj_task);
+            proj_tasks.add(proj_task)
         }
         cursor.close()
         db.close()
-        return proj_tasks;
+        return proj_tasks
     }
 
     fun getCommits(tasklist_id: Int): List<Commit>{
         val db = readableDatabase
         val task_commits = mutableListOf<Commit>()
         val query = "SELECT * FROM task_list WHERE task_list_id = $tasklist_id"
-        val cursor = db.rawQuery(query, null);
+        val cursor = db.rawQuery(query, null)
         while (cursor.moveToNext()) {
             getCommit(cursor.getInt(cursor.getColumnIndexOrThrow("task_id")))?.let { task_commits.add(it) }
         }
         cursor.close()
         db.close()
-        return task_commits;
+        return task_commits
     }
 
     fun getAllTaskDataFromProject(project_id: Int): List<FullTaskData> {
@@ -304,9 +350,9 @@ class DatabaseHelper(context: Context) :
                 if (user != null) {
                     task_users.add(user)
                 }
-                task_commits.addAll(getCommits(tasklist_id));
+                task_commits.addAll(getCommits(tasklist_id))
             }
-            val task = getTask(task_id);
+            val task = getTask(task_id)
             val fullTaskData = task?.let {
                 FullTaskData(
                     task_users = task_users,
@@ -316,33 +362,33 @@ class DatabaseHelper(context: Context) :
             }
             if (fullTaskData != null) {
                 proj_commits.add(fullTaskData)
-            };
+            }
         }
         cursor.close()
         db.close()
-        return proj_commits;
+        return proj_commits
     }
 
     fun getUserCommitsFromTask(user_id: Int, task_id: Int): List<Commit>{
         val db = readableDatabase
         val user_commits = mutableListOf<Commit>()
         val query = "SELECT * FROM task_list WHERE user_id = $user_id AND task_id = $task_id"
-        val cursor = db.rawQuery(query, null);
+        val cursor = db.rawQuery(query, null)
         while (cursor.moveToNext()) {
             val taskList_id = cursor.getInt(cursor.getColumnIndexOrThrow("id"))
-            val commits = getCommits(taskList_id);
-            user_commits.addAll(commits);
+            val commits = getCommits(taskList_id)
+            user_commits.addAll(commits)
         }
         cursor.close()
         db.close()
-        return user_commits;
+        return user_commits
     }
 
     fun getUserCommitsFromProject(user_id: Int, project_id: Int): List<Commit>{
         val db = readableDatabase
         val user_commits = mutableListOf<Commit>()
         val query = "SELECT * FROM tasks WHERE project_id = $project_id"
-        val cursor = db.rawQuery(query, null);
+        val cursor = db.rawQuery(query, null)
         while (cursor.moveToNext()) {
             val task_id = cursor.getInt(cursor.getColumnIndexOrThrow("id"))
             val commits = getUserCommitsFromTask(user_id, task_id)
@@ -350,6 +396,14 @@ class DatabaseHelper(context: Context) :
         }
         cursor.close()
         db.close()
-        return user_commits;
+        return user_commits
+    }
+
+////----------------------------------------- UPDATE -------------------------------------------////
+    fun updateUser(user: User){
+        val db = readableDatabase
+        val values = ContentValues().apply {
+
+        }
     }
 }

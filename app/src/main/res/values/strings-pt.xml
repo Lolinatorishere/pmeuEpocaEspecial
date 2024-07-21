@@ -1,13 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Project Man</string>
-    <string name="title_activity_add_project">AddProjectActivity</string>
-    <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
-    <string name="next">Next</string>
-    <string name="previous">Previous</string>
+<string name="app_name">Project Man</string>
+<string name="title_activity_add_project">AddProjectActivity</string>
+<!-- Strings used for fragments for navigation -->
+<string name="first_fragment_label">First Fragment</string>
+<string name="second_fragment_label">Second Fragment</string>
+<string name="next">Seguinte</string>
+<string name="previous">Anterior</string>
 
-    <string name="lorem_ipsum">
+<string name="lorem_ipsum">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam in scelerisque sem. Mauris
         volutpat, dolor id interdum ullamcorper, risus dolor egestas lectus, sit amet mattis purus
         dui nec risus. Maecenas non sodales nisi, vel dictum dolor. Class aptent taciti sociosqu ad
@@ -43,8 +44,8 @@
         libero vel nunc consequat, quis tincidunt nisl eleifend. Cras bibendum enim a justo luctus
         vestibulum. Fusce dictum libero quis erat maximus, vitae volutpat diam dignissim.
     </string>
-    <string name="error_invalid_credentials">Username or Password is Incorrect </string>
-    <string name="user_permission_user"> User </string>
-    <string name="user_permission_manager"> Manager </string>
-    <string name="user_permission_admin"> Admin </string>
+        <string name="error_invalid_credentials">Username ou Password Invalidos</string>
+        <string name="user_permission_user"> Utilizador </string>
+        <string name="user_permission_manager"> Gestor </string>
+        <string name="user_permission_admin"> Admin </string>
 </resources>
