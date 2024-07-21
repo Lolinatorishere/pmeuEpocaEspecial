@@ -170,6 +170,15 @@ class DatabaseHelper(context: Context) :
         return true //username is unique
     }
 
+    private fun checkTitleUniqueness(title: String): Boolean {
+        val db = readableDatabase
+        val query = "SELECT * FROM projects WHERE title = $title"
+        val cursor = db.rawQuery(query, null)
+        if (cursor.moveToFirst()) return false
+        db.close()
+        return true //username is unique
+    }
+
     fun getUserPublic(id: Int): User? {
         val db = readableDatabase
         val query = "SELECT * FROM users WHERE id = $id"
@@ -216,7 +225,29 @@ class DatabaseHelper(context: Context) :
         return empty_user
     }
 
-    fun getTask(id: Int): Task? {
+    fun getProject(id: Int): Project? {
+        val db = readableDatabase
+        val query = "SELECT * FROM projects WHERE id = $id"
+        val cursor = db.rawQuery(query, null)
+        val emptyProject = null
+        if (cursor.moveToFirst()) {
+            val dbProject = Project(
+                cursor.getInt(cursor.getColumnIndexOrThrow("id")),
+                cursor.getString(cursor.getColumnIndexOrThrow("title")),
+                cursor.getString(cursor.getColumnIndexOrThrow("description")),
+                cursor.getString(cursor.getColumnIndexOrThrow("date")),
+                cursor.getInt(cursor.getColumnIndexOrThrow("status")),
+                cursor.getString(cursor.getColumnIndexOrThrow("category")),
+            )
+            cursor.close()
+            db.close()
+            return dbProject
+        }
+        db.close()
+        return emptyProject
+    }
+
+        fun getTask(id: Int): Task? {
         val db = readableDatabase
         val query = "SELECT * FROM tasks WHERE id = $id"
         val cursor = db.rawQuery(query, null)
@@ -523,6 +554,67 @@ class DatabaseHelper(context: Context) :
         } else {
             context.getString(R.string.user_update_error_update_failure)
         }
-
     }
+
+    fun updateProject(project: Project, projectId: Int, context: Context): String{
+        val db = readableDatabase
+        val originalProject = getProject(projectId)
+        var title: String? = null
+        var description: String? = null
+        var status: Int? = null
+        var category: String? = null
+        if (originalProject != null) {
+
+            title = if (project.title.trim() != originalProject.title.trim() && project.title.isNotEmpty()) {
+                if (!checkTitleUniqueness(project.title)) {
+                    return context.getString(R.string.project_update_error_title_not_unique)
+                }
+                project.title.trim()
+            } else {
+                originalProject.title
+            }
+
+            description =
+                if (project.description.trim() != originalProject.description.trim() && project.description.isNotEmpty()) {
+                    project.description.trim()
+                } else {
+                    originalProject.description
+                }
+
+            if (project.status != originalProject.status) {
+                status = if (project.status in 1 downTo 0) {
+                    project.status
+                } else {
+                    originalProject.status
+                }
+            }
+
+            category = if(project.category != originalProject.category && project.category.isNotEmpty()){
+                project.category.trim()
+            }else{
+                originalProject.category
+            }
+
+        } else {
+            return context.getString(R.string.user_update_project_not_exists);
+        }
+
+        val values = ContentValues().apply {
+            put("title", title)
+            put("description", description)
+            put("status", status)
+            put("category", category)
+        }
+
+        val success = db.update("projects", values, "id = ?", arrayOf(projectId.toString()))
+        db.close()
+        return if(success > 0){
+            context.getString(R.string.project_update_success_start) +
+                    title +
+                    context.getString(R.string.project_update_success_end)
+        } else {
+            context.getString(R.string.project_update_error_update_failure)
+        }
+    }
+
 }

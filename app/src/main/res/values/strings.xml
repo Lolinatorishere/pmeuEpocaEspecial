@@ -1,13 +1,13 @@
 <resources>
-    <string name="app_name">Project Man</string>
+    <string name="app_name" translatable="false">Project Man</string>
     <string name="title_activity_add_project">AddProjectActivity</string>
     <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
+    <string name="first_fragment_label" translatable="false">First Fragment</string>
+    <string name="second_fragment_label" translatable="false">Second Fragment</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
 
-    <string name="lorem_ipsum">
+    <string name="lorem_ipsum" translatable="false">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam in scelerisque sem. Mauris
         volutpat, dolor id interdum ullamcorper, risus dolor egestas lectus, sit amet mattis purus
         dui nec risus. Maecenas non sodales nisi, vel dictum dolor. Class aptent taciti sociosqu ad
@@ -46,12 +46,19 @@
     <string name="error_invalid_credentials">Username or Password is Incorrect </string>
     <string name="user_permission_user"> User </string>
     <string name="user_permission_manager"> Manager </string>
-    <string name="user_permission_admin"> Admin </string>
+    <string name="user_permission_admin" translatable="false"> Admin </string>
 
     <string name="user_update_user_not_exists" > User Does Not Exist </string>
-    <string name="user_update_success_start" > User </string>
+    <string name="user_update_project_not_exists">Project Does Not Exist</string>
+
+    <string name="user_update_success_start"> User </string>
     <string name="user_update_success_end" > Has Been Successfully Updated </string>
-    <string name="user_update_error_username_not_unique">Username Inserted Is not Unique</string>
+    <string name="user_update_error_username_not_unique">Username Inserted Is Not Unique</string>
+    <string name="project_update_error_title_not_unique">Inserted Title Is Not Unique</string>
+
     <string name="user_update_error_update_failure">Failed To Update User Please Try Again Later</string>
+    <string name="project_update_success_start">"Project "</string>
+    <string name="project_update_success_end"> Has Been Successfully Updated</string>
+    <string name="project_update_error_update_failure">There was an error Updating the Project</string>
 
 </resources>

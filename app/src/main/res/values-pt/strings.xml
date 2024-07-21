@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="title_activity_add_project">AdicionarProjetoAtividade</string>
+    <string name="next">Seguinte</string>
+    <string name="previous">Anterior</string>
+    <string name="error_invalid_credentials">Username Ou Password estão Incorretos</string>
+    <string name="user_permission_user">Utilizador</string>
+    <string name="user_permission_manager">Gerente</string>
+    <string name="user_update_user_not_exists">Utilizador Não Existe</string>
+    <string name="user_update_project_not_exists">Projeto Não Existe</string>
+    <string name="user_update_success_start">"Utilizador "</string>
+    <string name="user_update_success_end">" Foi Atualizado com Sucesso"</string>
+    <string name="user_update_error_username_not_unique">Username Inserido Invalido</string>
+    <string name="project_update_error_title_not_unique">Titulo Inserido Invalido</string>
+    <string name="user_update_error_update_failure">Erro ao Atualizar o Utilizador Tente novamente mais tarde</string>
+    <string name="project_update_success_start">Projeto</string>
+    <string name="project_update_success_end">" Foi Atualizado com Sucesso"</string>
+    <string name="project_update_error_update_failure">Erro ao Atualizar o Projeto Tente novamente mais tarde</string>
+</resources>
