@@ -33,7 +33,7 @@ class LoginActivity : AppCompatActivity() {
             }
             if(password.isNotEmpty() && username.isNotEmpty()){
                 if(userLogin.login(username, password)){
-                    val intent = Intent("android.intent.action.MAIN")
+                    val intent = Intent(this, MainActivity::class.java)
                     startActivity(intent)
                     finish()
                 }else {

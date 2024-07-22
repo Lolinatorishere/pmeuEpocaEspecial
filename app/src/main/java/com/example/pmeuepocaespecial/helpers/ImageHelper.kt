@@ -1,10 +1,10 @@
 package com.example.pmeuepocaespecial.helpers
 
+import android.content.ContentResolver
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
-import android.util.Base64
 import java.io.ByteArrayOutputStream
 
 class ImageHelper(context: Context) {
@@ -15,8 +15,8 @@ class ImageHelper(context: Context) {
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
         return outputStream.toByteArray();
     }
-    fun decodeBase64ToImage(encodedImage: String): Bitmap? {
-        val decodedBytes = Base64.decode(encodedImage, Base64.DEFAULT)
-        return BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.size)
+
+    fun decodeByteArrayToImage(encodedImage: ByteArray): Bitmap? {
+        return BitmapFactory.decodeByteArray(encodedImage, 0,encodedImage.size)
     }
 }

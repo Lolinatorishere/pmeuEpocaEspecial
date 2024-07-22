@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.pmeuepocaespecial.R
 import com.example.pmeuepocaespecial.datatypes.Project
 
-class projectAdapter(private val projectList: List<Project>, private val context: Context) : RecyclerView.Adapter<projectAdapter.ProjectViewHolder>() {
+class ProjectAdapter(private val projectList: List<Project>, private val context: Context) : RecyclerView.Adapter<ProjectAdapter.ProjectViewHolder>() {
 
     private val projectIntent = Intent("com.example.lab004.SEG")
     class ProjectViewHolder(projectView: View) : RecyclerView.ViewHolder(projectView) {
@@ -30,6 +30,7 @@ class projectAdapter(private val projectList: List<Project>, private val context
 
     override fun onBindViewHolder(holder: ProjectViewHolder, position: Int) {
         val currentItem = projectList[position]
+        holder.projectImage.setImageResource(R.mipmap.ic_launcher)
         holder.projectName.text = currentItem.title
         holder.projectCategory.text = currentItem.title
         holder.projectButton.setOnClickListener {

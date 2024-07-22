@@ -97,5 +97,6 @@
     <string name="register_error_empty_image">Image Can\'t be Empty</string>
     <string name="register_error_not_unique_username">Username Already Taken</string>
     <string name="select_project">Select</string>
+    <string name="permission_error">You do not have the Permissions</string>
 
 </resources>

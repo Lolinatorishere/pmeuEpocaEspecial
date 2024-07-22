@@ -16,13 +16,15 @@ class UserAuthHelper(private val context: Context){
 
     fun checkLoginStatus(): Boolean {
         val sharedLogin = context.getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
+        val dbHelper = DatabaseHelper(context)
+        val user = dbHelper.getUser(sharedLogin.getInt("userId", 0))
         return sharedLogin.getBoolean("isLoggedIn", false)
     }
 
     fun checkUserAuth(): Boolean{
         val dbHelper = DatabaseHelper(context)
-        val sharedUserId = context.getSharedPreferences("UserIdPrefs", Context.MODE_PRIVATE)
-        val userId = sharedUserId.getInt("UserId", 0)
+        val sharedLogin = context.getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
+        val userId = sharedLogin.getInt("userId", 0)
         val userInfo = dbHelper.getUserPublic(userId) ?: return false
         return userInfo.userPermission == 1
     }
@@ -31,8 +33,8 @@ class UserAuthHelper(private val context: Context){
         //checks if admin if yes auto returns true
         if(checkUserAuth()) return 2; //returns admin code
         val dbHelper = DatabaseHelper(context)
-        val sharedUserId = context.getSharedPreferences("UserIdPrefs", Context.MODE_PRIVATE)
-        val userId = sharedUserId.getInt("UserId", 0)
+        val sharedLogin = context.getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
+        val userId = sharedLogin.getInt("userId", 0)
         val userPerm = dbHelper.getProjectPermissions(projectId, userId)
         if(userPerm) return 1
         return 0;
@@ -41,11 +43,9 @@ class UserAuthHelper(private val context: Context){
 
     private fun setUserInfo(isLoggedIn: Boolean, user_id: Int) {
         val sharedLogin = context.getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
-        val sharedUserId = context.getSharedPreferences("UserIdPrefs", Context.MODE_PRIVATE)
         val loginEditor = sharedLogin.edit()
-        val UserIdEditor = sharedUserId.edit()
         loginEditor.putBoolean("isLoggedIn", isLoggedIn)
-        UserIdEditor.putInt("UserId", user_id)
+        loginEditor.putInt("userId", user_id)
         loginEditor.apply()
     }
 

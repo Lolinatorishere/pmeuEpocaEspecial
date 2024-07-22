@@ -4,54 +4,55 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import android.provider.Settings.Global.getString
 import com.example.pmeuepocaespecial.R
 import com.example.pmeuepocaespecial.datatypes.Commit
 import com.example.pmeuepocaespecial.datatypes.FullTaskData
 import com.example.pmeuepocaespecial.datatypes.Project
 import com.example.pmeuepocaespecial.datatypes.Task
 import com.example.pmeuepocaespecial.datatypes.User
-import com.example.pmeuepocaespecial.datatypes.functionIntReturn
 import com.example.pmeuepocaespecial.datatypes.functionStringReturn
 
 class DatabaseHelper(context: Context) :
-    SQLiteOpenHelper(context, "pmeuproject.db" , null, 1) {
+    SQLiteOpenHelper(context, "pmeuproject.db" , null, 4) {
+
+        private var imgHelper = ImageHelper(context);
+        private var mContext: Context = context
     override fun onCreate(db: SQLiteDatabase?) {
-        val createDatabase =
+        val createUsers =
             "CREATE TABLE IF NOT EXISTS users (" +
                     "id INTEGER PRIMARY KEY AUTOINCREMENT," +
                     "name TEXT," +
                     "username VARCHAR(255) NOT NULL UNIQUE," +
                     "pfp LONGBLOB DEFAULT NULL," +
-                    "email VARCHAR(255) NOT NULL UNIQUE," +
+                    "email VARCHAR(255) NOT NULL," +
                     "password VARCHAR(255) NOT NULL," +
                     "user_permission TINYINT(1) NOT NULL" + //is admin or not
-                    "); " +
+                    "); "
 
-                    "CREATE TABLE IF NOT EXISTS tasks (" +
+        val createTasks = "CREATE TABLE IF NOT EXISTS tasks (" +
                     "id INTEGER PRIMARY KEY AUTOINCREMENT," +
                     "title VARCHAR(255) NOT NULL UNIQUE," +
                     "description TEXT," +
-                    "date_created DATETIME DEFAULT now()," +
-                    "date_finished DATETIME DEFAULT null" +
+                    "date_created DATETIME DEFAULT CURRENT_TIMESTAMP," +
+                    "date_finished DATETIME DEFAULT NULL," +
                     "points INTEGER NOT NULL DEFAULT 0," +
-                    "DATETIME DEFAULT null" +
+                    "DATETIME DEFAULT NULL," +
                     "status TINYINT(1) NOT NULL," +
                     "category TEXT NOT NULL," +
-                    "project_id INTEGER NOT NULL" +
-                    "FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE," +
-                    "); " +
+                    "project_id INTEGER NOT NULL," +
+                    "FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE" +
+                    "); "
 
-                    "CREATE TABLE IF NOT EXISTS projects (" +
+        val createProjects = "CREATE TABLE IF NOT EXISTS projects (" +
                     "id INTEGER PRIMARY KEY AUTOINCREMENT," +
                     "title VARCHAR(255) UNIQUE," +
                     "description TEXT," +
-                    "date_created DATETIME DEFAULT now()," +
+                    "date_created DATETIME DEFAULT CURRENT_TIMESTAMP," +
                     "status TINYINT(1) NOT NULL," + // is manager or not
                     "category TEXT" +
-                    "); " +
+                    "); "
 
-                    "CREATE TABLE IF NOT EXISTS member_list (" +
+        val createMemberList = "CREATE TABLE IF NOT EXISTS member_list (" +
                     "id INTEGER PRIMARY KEY AUTOINCREMENT," +
                     "user_id INTEGER NOT NULL," +
                     "project_id INTEGER NOT NULL," +
@@ -59,40 +60,52 @@ class DatabaseHelper(context: Context) :
                     "FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE," +
                     "FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE," +
                     "UNIQUE(user_id, project_id)" +
-                    "); " +
+                    "); "
 
-                    "CREATE TABLE IF NOT EXISTS task_list (" +
+        val createTaskList = "CREATE TABLE IF NOT EXISTS task_list (" +
                     "id INTEGER PRIMARY KEY AUTOINCREMENT," +
                     "task_id INTEGER NOT NULL," +
-                    "user_id INTEGER ," +
-                    "FOREIGNKEY (task_id) REFERENCES tasks(id) ON DELETE CASCADE," +
+                    "user_id INTEGER," +
+                    "FOREIGN KEY (task_id) REFERENCES tasks(id) ON DELETE CASCADE," +
                     "FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE," +
                     "UNIQUE(task_id, user_id) " +
-                    "); " +
+                    "); "
 
-                    "CREATE TABLE IF NOT EXISTS commits (" +
+        val createCommits = "CREATE TABLE IF NOT EXISTS commits (" +
                     "id INTEGER PRIMARY KEY AUTOINCREMENT," +
                     "task_list_id INTEGER NOT NULL," +
-                    "date DATETIME DEFAULT now()," +
+                    "date DATETIME DEFAULT CURRENT_TIMESTAMP," +
                     "description TEXT," +
                     "point_value INTEGER NOT NULL," +
                     "FOREIGN KEY (task_list_id) REFERENCES task_list(id) ON DELETE CASCADE" +
                     "); "
 
-        db?.execSQL(createDatabase)
+        val defaultAdminUser = "INSERT INTO users (name, username, email, password, user_permission) " +
+                " VALUES ('admin','admin','admin','admin', 1)"
+        db?.execSQL(createUsers)
+        db?.execSQL(createProjects)
+        db?.execSQL(createTasks)
+        db?.execSQL(createTaskList)
+        db?.execSQL(createMemberList)
+        db?.execSQL(createCommits)
+        db?.execSQL(defaultAdminUser)
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
-        val dropDatabase = "DROP TABLE IF EXISTS users; " +
-                "DROP TABLE IF EXISTS tasks; " +
-                "DROP TABLE IF EXISTS projects; " +
-                "DROP TABLE IF EXISTS member_list; " +
-                "DROP TABLE IF EXISTS task_list; " +
-                "DROP TABLE IF EXISTS task_commits; "
-        db?.execSQL(dropDatabase)
+        val dropUsers = "DROP TABLE IF EXISTS users; "
+        val dropProjects = "DROP TABLE IF EXISTS projects; "
+        val dropTasks = "DROP TABLE IF EXISTS tasks; "
+        val dropTaskList = "DROP TABLE IF EXISTS task_list; "
+        val dropMemberList = "DROP TABLE IF EXISTS member_list; "
+        val dropCommits = "DROP TABLE IF EXISTS commits; "
+        db?.execSQL(dropUsers)
+        db?.execSQL(dropProjects)
+        db?.execSQL(dropTasks)
+        db?.execSQL(dropTaskList)
+        db?.execSQL(dropMemberList)
+        db?.execSQL(dropCommits)
         onCreate(db)
     }
-
 ////---------------------------------------- CREATE --------------------------------------------////
 
     fun insertUser(user: User, context: Context): functionStringReturn{
@@ -226,6 +239,7 @@ class DatabaseHelper(context: Context) :
             )
             cursor.close()
             db.close()
+            println(db_user)
             return db_user
         }
         db.close()
@@ -320,6 +334,27 @@ class DatabaseHelper(context: Context) :
         cursor.close()
         db.close()
         return db_users
+    }
+
+    fun getAllProjects(): List<Project>{
+        val db = readableDatabase
+        val dbProjects: MutableList<Project> = mutableListOf()
+        val query = "SELECT * FROM projects"
+        val cursor = db.rawQuery(query, null)
+        while (cursor.moveToNext()) {
+            val dbProject = Project(
+                cursor.getInt(cursor.getColumnIndexOrThrow("id")),
+                cursor.getString(cursor.getColumnIndexOrThrow("title")),
+                cursor.getString(cursor.getColumnIndexOrThrow("description")),
+                cursor.getString(cursor.getColumnIndexOrThrow("date")),
+                cursor.getInt(cursor.getColumnIndexOrThrow("status")),
+                cursor.getString(cursor.getColumnIndexOrThrow("category"))
+            )
+            dbProjects.add(dbProject)
+        }
+        cursor.close()
+        db.close()
+    return dbProjects;
     }
 
     fun getProjectUsers(project_id: Int): List<User> {
@@ -514,7 +549,7 @@ class DatabaseHelper(context: Context) :
                     originalUser.username
                 }
 
-            pfp = if (!user.pfp.contentEquals(originalUser.pfp) && user.pfp.isNotEmpty()) {
+            pfp = if (!user.pfp.contentEquals(originalUser.pfp) && user.pfp != null) {
                 user.pfp
             } else {
                 originalUser.pfp

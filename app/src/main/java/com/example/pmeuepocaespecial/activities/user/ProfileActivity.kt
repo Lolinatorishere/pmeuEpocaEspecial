@@ -20,7 +20,9 @@ class ProfileActivity : AppCompatActivity() {
     private var dbHelper = DatabaseHelper(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
         if(!userAuth.checkLoginStatus()) startActivity(loginIntent)
+
         super.onCreate(savedInstanceState)
         binding = ActivityProfileBinding.inflate(layoutInflater)
         binding.btnReturnToMain.setOnClickListener {
@@ -58,6 +60,5 @@ class ProfileActivity : AppCompatActivity() {
             binding.emailTextView.text = it.email
             binding.permissionTextView.text = it.email
         }
-        // Set other user information similarly
     }
 }

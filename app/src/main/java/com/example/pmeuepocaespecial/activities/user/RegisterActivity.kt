@@ -1,14 +1,11 @@
 package com.example.pmeuepocaespecial.activities.user
 
-import android.app.Instrumentation.ActivityResult
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.example.pmeuepocaespecial.R
@@ -61,7 +58,7 @@ class RegisterActivity : AppCompatActivity() {
                 val dbHelper = DatabaseHelper(this)
                 val user = User(0, name, username, image, email, password, 0)
                 val userValid = dbHelper.insertUser(user, this)
-                    if(userValid.returnBoolean){
+                if(userValid.returnBoolean){
                     Toast.makeText(this, userValid.returnString, Toast.LENGTH_SHORT).show()
                     startActivity(loginIntent)
                     finish()
