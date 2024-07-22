@@ -32,7 +32,7 @@ class ProjectAdapter(private val projectList: List<Project>, private val context
         val currentItem = projectList[position]
         holder.projectImage.setImageResource(R.mipmap.ic_launcher)
         holder.projectName.text = currentItem.title
-        holder.projectCategory.text = currentItem.title
+        holder.projectCategory.text = currentItem.category
         holder.projectButton.setOnClickListener {
             projectIntent.putExtra("projectId", currentItem.id)
             context.startActivity(projectIntent)

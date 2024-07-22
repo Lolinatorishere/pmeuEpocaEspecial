@@ -190,7 +190,7 @@ class DatabaseHelper(context: Context) :
         return true //username is unique
     }
 
-    private fun checkTitleUniqueness(title: String): Boolean {
+     fun checkTitleUniqueness(title: String): Boolean {
         val db = readableDatabase
         val query = "SELECT * FROM projects WHERE title = '$title'"
         val cursor = db.rawQuery(query, null)
@@ -346,7 +346,7 @@ class DatabaseHelper(context: Context) :
                 cursor.getInt(cursor.getColumnIndexOrThrow("id")),
                 cursor.getString(cursor.getColumnIndexOrThrow("title")),
                 cursor.getString(cursor.getColumnIndexOrThrow("description")),
-                cursor.getString(cursor.getColumnIndexOrThrow("date")),
+                cursor.getString(cursor.getColumnIndexOrThrow("date_created")),
                 cursor.getInt(cursor.getColumnIndexOrThrow("status")),
                 cursor.getString(cursor.getColumnIndexOrThrow("category"))
             )

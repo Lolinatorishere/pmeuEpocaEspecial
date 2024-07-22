@@ -98,5 +98,13 @@
     <string name="register_error_not_unique_username">Username Already Taken</string>
     <string name="select_project">Select</string>
     <string name="permission_error">You do not have the Permissions</string>
+    <string name="create_project_title_hint">Title</string>
+    <string name="create_project_category_hint">Category</string>
+    <string name="create_project_description_hint">Description</string>
+    <string name="create_project_title">New Project</string>
+    <string name="create_project">Create</string>
+    <string name="create_project_no_input">Please Fill Out All Fields</string>
+    <string name="create_project_success">Project Created Successfully</string>
+    <string name="create_project_title_non_unique">The Project Title has been Taken</string>
 
 </resources>

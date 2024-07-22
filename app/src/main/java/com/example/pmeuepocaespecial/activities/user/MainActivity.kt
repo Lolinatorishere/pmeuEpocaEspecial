@@ -51,6 +51,7 @@ class MainActivity : AppCompatActivity() {
                 if(user.userPermission == 1){
                     val intent = Intent(this, AddProjectActivity::class.java)
                     startActivity(intent)
+                    finish()
                 }else{
                     Toast.makeText(this, R.string.permission_error, Toast.LENGTH_SHORT).show()
                 }
@@ -61,7 +62,6 @@ class MainActivity : AppCompatActivity() {
 
     }
     private fun initializeRecyclerView() {
-        // Assuming you have a method to fetch or generate a list of projects
         val projectsList = fetchProjects()
 
         val projectAdapter = ProjectAdapter(projectsList, this)
@@ -75,11 +75,10 @@ class MainActivity : AppCompatActivity() {
         if (!userAuth.checkLoginStatus()) {
             val loginIntent = Intent(this, LoginActivity::class.java)
             startActivity(loginIntent)
-            finish() // Optional: Finish MainActivity to remove it from the back stack
+            finish()
         }
     }
 
-    // Implement fetchProjects() to retrieve your data
     private fun fetchProjects(): List<Project> {
         val projects: MutableList<Project> = mutableListOf()
         projects.addAll(dbHelper.getAllProjects())
