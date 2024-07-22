@@ -23,4 +23,7 @@
     <string name="commit_update_task_not_exists">Commit Não Existe</string>
     <string name="commit_update_success_end">" Foi Atualizado com Sucesso"</string>
     <string name="commit_update_error_update_failure">Erro ao Atualizar o Commit Tente novamente mais tarde</string>
+    <string name="register_string">Registrar</string>
+    <string name="login_error_empty_username">Username não pode estar vazio</string>
+    <string name="login_error_empty_password">Password não pode estar vazio</string>
 </resources>

@@ -22,10 +22,40 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".activities.user.LoginActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.example.lab001.SEG"/>
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activities.user.RegisterActivity"
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="com.example.lab002.SEG"/>
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activities.user.ProfileActivity"
+            android:exported="true" />
+        <activity
+            android:name=".activities.user.ProfileEditActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.user.ProjectActivity"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.example.lab004.SEG"/>
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
     </application>
 
 </manifest>

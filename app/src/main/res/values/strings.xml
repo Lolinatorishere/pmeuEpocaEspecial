@@ -68,6 +68,34 @@
     <string name="commit_update_success_start" translatable="false">Commit </string>
     <string name="commit_update_success_end"> Has Been Successfully Updated</string>
     <string name="commit_update_error_update_failure">There was an error Updating the Commit</string>
-
+    <string name="login_text" translatable="false">Login</string>
+    <string name="register_string">Register</string>
+    <string name="login_error_empty_username">Username Can Not Be Empty</string>
+    <string name="login_error_empty_password">Password Can Not be Empty</string>
+    <string name="image_preview">Profile Picture</string>
+    <string name="select_image">Add Image</string>
+    <string name="name_string">Name</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="confirm_password_error">Passwords Do Not Match</string>
+    <string name="user_create_success">User Registered Successfully</string>
+    <string name="user_create_error_username_not_unique">Username Inserted Is Not Unique</string>
+    <string name="delete_user_failure">Error Deleting User</string>
+    <string name="delete_user_success">User Successfully Deleted</string>
+    <string name="delete_project_failure">Error Deleting Project</string>
+    <string name="delete_project_success">Project Delteted Successfully</string>
+    <string name="delete_task_failure">Error Deleteing Task</string>
+    <string name="delete_task_success">Task Delteted Successfully</string>
+    <string name="delete_commit_failure">Error Deleting Commit</string>
+    <string name="delete_commit_success">Commit Deleted Successfully</string>
+    <string name="delete_user_from_project_failure">Error Removing User From Project</string>
+    <string name="delete_user_from_project_success">User Removed From Project</string>
+    <string name="register_error_empty_name">User Can\'t Be Empty</string>
+    <string name="register_error_empty_username">Username Can\'t Be Empty</string>
+    <string name="register_error_empty_email">Email Can\'t Be Empty</string>
+    <string name="register_error_empty_password">Password Can\'t Be Empty</string>
+    <string name="register_error_empty_confirmpassword">Confirmation Can\'t Be Empty</string>
+    <string name="register_error_empty_image">Image Can\'t be Empty</string>
+    <string name="register_error_not_unique_username">Username Already Taken</string>
+    <string name="select_project">Select</string>
 
 </resources>

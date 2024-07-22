@@ -11,9 +11,11 @@ import com.example.pmeuepocaespecial.datatypes.FullTaskData
 import com.example.pmeuepocaespecial.datatypes.Project
 import com.example.pmeuepocaespecial.datatypes.Task
 import com.example.pmeuepocaespecial.datatypes.User
+import com.example.pmeuepocaespecial.datatypes.functionIntReturn
+import com.example.pmeuepocaespecial.datatypes.functionStringReturn
 
 class DatabaseHelper(context: Context) :
-    SQLiteOpenHelper(context, "pmeuproject.db" , null, 0) {
+    SQLiteOpenHelper(context, "pmeuproject.db" , null, 1) {
     override fun onCreate(db: SQLiteDatabase?) {
         val createDatabase =
             "CREATE TABLE IF NOT EXISTS users (" +
@@ -93,18 +95,22 @@ class DatabaseHelper(context: Context) :
 
 ////---------------------------------------- CREATE --------------------------------------------////
 
-    fun insertUser(user: User) {
+    fun insertUser(user: User, context: Context): functionStringReturn{
         val db = writableDatabase
+        if(!checkUsernameUniqueness(user.username)){
+            return functionStringReturn(context.getString(R.string.user_create_error_username_not_unique), false)
+        }
         val values = ContentValues().apply {
             put("name", user.name)
             put("username", user.username)
             put("pfp", user.pfp)
             put("email", user.email)
             put("password", user.password)
-            put("user_permission", user.userPermission)
+            put("user_permission", 0)
         }
         db.insert("users", null, values)
         db.close()
+        return functionStringReturn(context.getString(R.string.user_create_success), true)
     }
 
     fun insertTask(task: Task) {
@@ -138,7 +144,7 @@ class DatabaseHelper(context: Context) :
     ////------------------------------------------ READ --------------------------------------------////
     fun checkUserCredentials(username: String, password: String): User? {
         val db = readableDatabase
-        val query = "SELECT * FROM users WHERE username = $username"
+        val query = "SELECT * FROM users WHERE username =  '$username'"
         val cursor = db.rawQuery(query, null)
         val empty_user = null
         if (cursor.moveToFirst()) {
@@ -162,27 +168,27 @@ class DatabaseHelper(context: Context) :
         return empty_user
     }
 
-    private fun checkUsernameUniqueness(username: String): Boolean {
+    fun checkUsernameUniqueness(username: String): Boolean {
         val db = readableDatabase
-        val query = "SELECT * FROM users WHERE username = $username"
+        val query = "SELECT * FROM users WHERE username = '$username'"
         val cursor = db.rawQuery(query, null)
-        if (cursor.moveToFirst()) return false
-        db.close()
+        if (cursor.count != 0){ return false}
+        cursor.close()
         return true //username is unique
     }
 
     private fun checkTitleUniqueness(title: String): Boolean {
         val db = readableDatabase
-        val query = "SELECT * FROM projects WHERE title = $title"
+        val query = "SELECT * FROM projects WHERE title = '$title'"
         val cursor = db.rawQuery(query, null)
-        if (cursor.moveToFirst()) return false
-        db.close()
+        if (cursor.count != 0){ return false}
+        cursor.close()
         return true //username is unique
     }
 
     fun getUserPublic(id: Int): User? {
         val db = readableDatabase
-        val query = "SELECT * FROM users WHERE id = $id"
+        val query = "SELECT * FROM users WHERE id = '$id'"
         val cursor = db.rawQuery(query, null)
         val empty_user = null
         if (cursor.moveToFirst()) {
@@ -205,7 +211,7 @@ class DatabaseHelper(context: Context) :
 
     fun getUser(id: Int): User? {
         val db = readableDatabase
-        val query = "SELECT * FROM users WHERE id = $id"
+        val query = "SELECT * FROM users WHERE id = '$id'"
         val cursor = db.rawQuery(query, null)
         val empty_user = null
         if (cursor.moveToFirst()) {
@@ -228,7 +234,7 @@ class DatabaseHelper(context: Context) :
 
     fun getProject(id: Int): Project? {
         val db = readableDatabase
-        val query = "SELECT * FROM projects WHERE id = $id"
+        val query = "SELECT * FROM projects WHERE id = '$id'"
         val cursor = db.rawQuery(query, null)
         val emptyProject = null
         if (cursor.moveToFirst()) {
@@ -250,7 +256,7 @@ class DatabaseHelper(context: Context) :
 
     fun getTask(id: Int): Task? {
         val db = readableDatabase
-        val query = "SELECT * FROM tasks WHERE id = $id"
+        val query = "SELECT * FROM tasks WHERE id = '$id'"
         val cursor = db.rawQuery(query, null)
         val empty_task = null
         if (cursor.moveToFirst()) {
@@ -276,7 +282,7 @@ class DatabaseHelper(context: Context) :
 
     fun getCommit(id: Int): Commit? {
         val db = readableDatabase
-        val query = "SELECT * FROM task_commits WHERE id = $id"
+        val query = "SELECT * FROM task_commits WHERE id = '$id'"
         val cursor = db.rawQuery(query, null)
         val empty_commit = null
         if (cursor.moveToFirst()) {
@@ -319,7 +325,7 @@ class DatabaseHelper(context: Context) :
     fun getProjectUsers(project_id: Int): List<User> {
         val db = readableDatabase
         val proj_users = mutableListOf<User>()
-        val query = "SELECT * FROM member_list WHERE project_id = $project_id"
+        val query = "SELECT * FROM member_list WHERE project_id = '$project_id'"
         val cursor = db.rawQuery(query, null)
         while (cursor.moveToNext()) {
             getUserPublic(cursor.getInt(cursor.getColumnIndexOrThrow("user_id")))?.let {
@@ -338,7 +344,7 @@ class DatabaseHelper(context: Context) :
     fun getProjectPermissions(projectId: Int, userId: Int): Boolean {
         val db = readableDatabase
         var userPermissions: Boolean = false
-        val query = "SELECT * FROM member_list WHERE project_id = $projectId AND user_id = $userId"
+        val query = "SELECT * FROM member_list WHERE project_id = '$projectId' AND user_id = '$userId"
         val cursor = db.rawQuery(query, null)
         while (cursor.moveToFirst()) {
             val permission = cursor.getInt(cursor.getColumnIndexOrThrow("user_permissions"))
@@ -356,7 +362,7 @@ class DatabaseHelper(context: Context) :
     fun getTaskUsers(task_id: Int): List<User> {
         val db = readableDatabase
         val task_users = mutableListOf<User>()
-        val query = "SELECT * FROM task_list WHERE task_id = $task_id"
+        val query = "SELECT * FROM task_list WHERE task_id = '$task_id'"
         val cursor = db.rawQuery(query, null)
         while (cursor.moveToNext()) {
             getUserPublic(cursor.getInt(cursor.getColumnIndexOrThrow("user_id")))?.let {
@@ -373,7 +379,7 @@ class DatabaseHelper(context: Context) :
     fun getProjectTasks(project_id: Int): List<Task> {
         val db = readableDatabase
         val proj_tasks = mutableListOf<Task>()
-        val query = "SELECT * FROM tasks WHERE project_id = $project_id"
+        val query = "SELECT * FROM tasks WHERE project_id = '$project_id'"
         val cursor = db.rawQuery(query, null)
         while (cursor.moveToNext()) {
             val proj_task = Task(
@@ -397,7 +403,7 @@ class DatabaseHelper(context: Context) :
     fun getCommits(tasklist_id: Int): List<Commit> {
         val db = readableDatabase
         val task_commits = mutableListOf<Commit>()
-        val query = "SELECT * FROM task_list WHERE task_list_id = $tasklist_id"
+        val query = "SELECT * FROM task_list WHERE task_list_id = '$tasklist_id'"
         val cursor = db.rawQuery(query, null)
         while (cursor.moveToNext()) {
             getCommit(cursor.getInt(cursor.getColumnIndexOrThrow("task_id")))?.let {
@@ -414,11 +420,11 @@ class DatabaseHelper(context: Context) :
     fun getAllTaskDataFromProject(project_id: Int): List<FullTaskData> {
         val db = readableDatabase
         val proj_commits = mutableListOf<FullTaskData>()
-        val query = "SELECT * FROM tasks WHERE project_id = $project_id"
+        val query = "SELECT * FROM tasks WHERE project_id = '$project_id'"
         val cursor = db.rawQuery(query, null)
         while (cursor.moveToNext()) {
             val task_id = cursor.getInt(cursor.getColumnIndexOrThrow("id"))
-            val tasklist_query = "SELECT * FROM task_list WHERE task_id = $task_id"
+            val tasklist_query = "SELECT * FROM task_list WHERE task_id = '$task_id'"
             val tasklist_cursor = db.rawQuery(tasklist_query, null)
             val task_commits = kotlin.collections.mutableListOf<Commit>()
             val task_users = mutableListOf<User>()
@@ -453,7 +459,7 @@ class DatabaseHelper(context: Context) :
     fun getUserCommitsFromTask(user_id: Int, task_id: Int): List<Commit> {
         val db = readableDatabase
         val user_commits = mutableListOf<Commit>()
-        val query = "SELECT * FROM task_list WHERE user_id = $user_id AND task_id = $task_id"
+        val query = "SELECT * FROM task_list WHERE user_id = '$user_id' AND task_id = '$task_id'"
         val cursor = db.rawQuery(query, null)
         while (cursor.moveToNext()) {
             val taskList_id = cursor.getInt(cursor.getColumnIndexOrThrow("id"))
@@ -468,7 +474,7 @@ class DatabaseHelper(context: Context) :
     fun getUserCommitsFromProject(user_id: Int, project_id: Int): List<Commit> {
         val db = readableDatabase
         val user_commits = mutableListOf<Commit>()
-        val query = "SELECT * FROM tasks WHERE project_id = $project_id"
+        val query = "SELECT * FROM tasks WHERE project_id = '$project_id'"
         val cursor = db.rawQuery(query, null)
         while (cursor.moveToNext()) {
             val task_id = cursor.getInt(cursor.getColumnIndexOrThrow("id"))
@@ -559,7 +565,7 @@ class DatabaseHelper(context: Context) :
         }
     }
 
-    fun updateProject(project: Project, projectId: Int, context: Context): String {
+    fun updateProject(project: Project, projectId: Int, context: Context): functionStringReturn{
         val db = readableDatabase
         val originalProject = getProject(projectId)
         var title: String? = null
@@ -571,7 +577,7 @@ class DatabaseHelper(context: Context) :
             title =
                 if (project.title.trim() != originalProject.title.trim() && project.title.isNotEmpty()) {
                     if (!checkTitleUniqueness(project.title)) {
-                        return context.getString(R.string.project_update_error_title_not_unique)
+                        return functionStringReturn(context.getString(R.string.project_update_error_title_not_unique), false)
                     }
                     project.title.trim()
                 } else {
@@ -601,7 +607,7 @@ class DatabaseHelper(context: Context) :
                 }
 
         } else {
-            return context.getString(R.string.project_update_project_not_exists);
+            return functionStringReturn(context.getString(R.string.project_update_project_not_exists), false)
         }
 
         val values = ContentValues().apply {
@@ -614,15 +620,15 @@ class DatabaseHelper(context: Context) :
         val success = db.update("projects", values, "id = ?", arrayOf(projectId.toString()))
         db.close()
         return if (success > 0) {
-            context.getString(R.string.project_update_success_start) +
+            functionStringReturn(context.getString(R.string.project_update_success_start) +
                     title +
-                    context.getString(R.string.project_update_success_end)
+                    context.getString(R.string.project_update_success_end), true)
         } else {
-            context.getString(R.string.project_update_error_update_failure)
+           functionStringReturn(context.getString(R.string.project_update_error_update_failure), false)
         }
     }
 
-    fun updateTask(task: Task, taskId: Int, context: Context): String {
+    fun updateTask(task: Task, taskId: Int, context: Context): functionStringReturn {
         val db = readableDatabase
         val originalTask = getTask(taskId)
         var title: String? = null
@@ -651,7 +657,7 @@ class DatabaseHelper(context: Context) :
             }
 
         } else {
-            return context.getString(R.string.task_update_task_not_exists);
+            return functionStringReturn(context.getString(R.string.task_update_task_not_exists), false)
         }
 
         val values = ContentValues().apply {
@@ -663,15 +669,15 @@ class DatabaseHelper(context: Context) :
         val success = db.update("tasks", values, "id = ?", arrayOf(taskId.toString()))
         db.close()
         return if (success > 0) {
-            context.getString(R.string.task_update_success_start) +
+            functionStringReturn(context.getString(R.string.task_update_success_start) +
                     title +
-                    context.getString(R.string.task_update_success_end)
+                    context.getString(R.string.task_update_success_end), true)
         } else {
-            context.getString(R.string.task_update_error_update_failure)
+            functionStringReturn(context.getString(R.string.task_update_error_update_failure), false)
         }
     }
 
-    fun updateCommit(commit: Commit, commitId: Int, context: Context): String {
+    fun updateCommit(commit: Commit, commitId: Int, context: Context): functionStringReturn {
         val db = readableDatabase
         val originalCommit = getCommit(commitId)
         var description: String? = null
@@ -691,7 +697,7 @@ class DatabaseHelper(context: Context) :
             }
 
         } else {
-            return context.getString(R.string.commit_update_task_not_exists);
+            return functionStringReturn(context.getString(R.string.commit_update_task_not_exists), false)
         }
 
         val values = ContentValues().apply {
@@ -702,62 +708,80 @@ class DatabaseHelper(context: Context) :
         val success = db.update("commits", values, "id = ?", arrayOf(commitId.toString()))
         db.close()
         return if (success > 0) {
-            context.getString(R.string.commit_update_success_start) +
+            functionStringReturn(context.getString(R.string.commit_update_success_start) +
                     originalCommit.id +
-                    context.getString(R.string.commit_update_success_end)
+                    context.getString(R.string.commit_update_success_end) , true)
         } else {
-            context.getString(R.string.commit_update_error_update_failure)
+            functionStringReturn(context.getString(R.string.commit_update_error_update_failure), true)
         }
     }
 
 ////----------------------------------------- DELETE -------------------------------------------////
 
-    fun deleteUser(userId: Int): Int {
+    fun deleteUser(userId: Int, context: Context): functionStringReturn {
         val db = writableDatabase
         val whereArgs = arrayOf(userId.toString())
         val deletedRows = db.delete("users", "id = ?", whereArgs)
         db.close()
-        return deletedRows // Number of rows deleted
+        if(deletedRows == 0){
+            return functionStringReturn(context.getString(R.string.delete_user_failure), false)
+        }
+        return functionStringReturn(context.getString(R.string.delete_user_success), true) // Number of rows deleted
     }
 
-    fun deleteProject(projectId: Int): Int {
+    fun deleteProject(projectId: Int, context: Context): functionStringReturn {
         val db = writableDatabase
         val whereArgs = arrayOf(projectId.toString())
         val deletedRows = db.delete("projects", "id = ?", whereArgs)
         db.close()
-        return deletedRows // Number of rows deleted
+        if(deletedRows == 0){
+            return functionStringReturn(context.getString(R.string.delete_project_failure), false)
+        }
+        return functionStringReturn(context.getString(R.string.delete_project_success), true) // Number of rows deleted
     }
 
-    fun deleteTask(taskId: Int): Int {
+    fun deleteTask(taskId: Int, context: Context): functionStringReturn {
         val db = writableDatabase
         val whereArgs = arrayOf(taskId.toString())
         val deletedRows = db.delete("tasks", "id = ?", whereArgs)
         db.close()
-        return deletedRows // Number of rows deleted
+        if(deletedRows == 0){
+            return functionStringReturn(context.getString(R.string.delete_task_failure), false)
+        }
+        return functionStringReturn(context.getString(R.string.delete_task_success), true) // Number of rows deleted
     }
 
-    fun deleteCommit(commitId: Int): Int {
+    fun deleteCommit(commitId: Int, context: Context): functionStringReturn {
         val db = writableDatabase
         val whereArgs = arrayOf(commitId.toString())
         val deletedRows = db.delete("commits", "id = ?", whereArgs)
         db.close()
-        return deletedRows // Number of rows deleted
+        if(deletedRows == 0){
+            return functionStringReturn(context.getString(R.string.delete_commit_failure), false)
+        }
+        return functionStringReturn(context.getString(R.string.delete_commit_success), true) // Number of rows deleted
     }
 
-    fun removeUserFromProject(userId: Int, projectId: Int): Int{
+    fun removeUserFromProject(userId: Int, projectId: Int, context: Context): functionStringReturn{
         val db = writableDatabase
         val whereArgs = arrayOf(userId.toString(), projectId.toString())
         val deletedRows = db.delete("member_list", "user_id = ? AND project_id = ? ", whereArgs)
         db.close()
-        return deletedRows // Number of rows deleted
+        if(deletedRows == 0){
+            return functionStringReturn(context.getString(R.string.delete_user_from_project_failure), false)
+        }
+        return functionStringReturn(context.getString(R.string.delete_user_from_project_success), true) // Number of rows deleted
     }
 
-    fun removeUserFromTask(userId: Int, taskId: Int): Int{
+    fun removeUserFromTask(userId: Int, taskId: Int, context: Context): functionStringReturn{
         val db = writableDatabase
         val whereArgs = arrayOf(userId.toString(), taskId.toString())
         val deletedRows = db.delete("task_list", "user_id = ? AND task_id = ? ", whereArgs)
         db.close()
-        return deletedRows // Number of rows deleted
+        if(deletedRows == 0){
+            return functionStringReturn(context.getString(R.string.delete_task_failure), false)
+        }
+        return functionStringReturn(context.getString(R.string.delete_task_success), true) // Number of rows deleted
     }
 
 }

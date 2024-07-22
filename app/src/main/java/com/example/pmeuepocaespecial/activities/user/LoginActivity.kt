@@ -14,23 +14,36 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+        val registerIntent = Intent("com.example.lab002.SEG")
 
         val usernameEditText = findViewById<EditText>(R.id.username)
         val passwordEditText = findViewById<EditText>(R.id.password)
         val loginButton = findViewById<Button>(R.id.loginButton)
+        val registerButton = findViewById<Button>(R.id.registerButton)
 
         loginButton.setOnClickListener {
-            val username = usernameEditText.text.toString()
-            val password = passwordEditText.text.toString()
+            val username = usernameEditText.text.toString().trim()
+            val password = passwordEditText.text.toString().trim()
             val userLogin = UserAuthHelper(this)
-
-            if(userLogin.login(username, password)){
-                val intent = Intent(this, MainActivity::class.java)
-                startActivity(intent)
-                finish()
-            }else {
-                Toast.makeText(this, R.string.error_invalid_credentials, Toast.LENGTH_SHORT).show()
+            if(username.isEmpty()){
+                Toast.makeText(this , R.string.login_error_empty_username, Toast.LENGTH_SHORT).show()
             }
+            if(password.isEmpty()){
+                Toast.makeText(this , R.string.login_error_empty_password, Toast.LENGTH_SHORT).show()
+            }
+            if(password.isNotEmpty() && username.isNotEmpty()){
+                if(userLogin.login(username, password)){
+                    val intent = Intent("android.intent.action.MAIN")
+                    startActivity(intent)
+                    finish()
+                }else {
+                    Toast.makeText(this, R.string.error_invalid_credentials, Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+        registerButton.setOnClickListener{
+            startActivity(registerIntent)
+            finish()
         }
     }
 }

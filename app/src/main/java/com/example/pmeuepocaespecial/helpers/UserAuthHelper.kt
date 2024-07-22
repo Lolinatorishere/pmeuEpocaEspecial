@@ -38,6 +38,7 @@ class UserAuthHelper(private val context: Context){
         return 0;
 
     }
+
     private fun setUserInfo(isLoggedIn: Boolean, user_id: Int) {
         val sharedLogin = context.getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
         val sharedUserId = context.getSharedPreferences("UserIdPrefs", Context.MODE_PRIVATE)
@@ -52,4 +53,5 @@ class UserAuthHelper(private val context: Context){
         val dbHelper = DatabaseHelper(context)
         return dbHelper.checkUserCredentials(username.trim(), password.trim())
     }
+
 }

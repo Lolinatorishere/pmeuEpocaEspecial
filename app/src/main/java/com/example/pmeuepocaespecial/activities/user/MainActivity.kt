@@ -9,7 +9,7 @@ import com.example.pmeuepocaespecial.helpers.UserAuthHelper
 
 class MainActivity : AppCompatActivity() {
     val userAuth = UserAuthHelper(this)
-    val loginIntent = Intent(this, LoginActivity::class.java)
+    val loginIntent = Intent("com.example.lab001.SEG")
 
     private lateinit var binding: ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
