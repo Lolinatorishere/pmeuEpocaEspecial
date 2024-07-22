@@ -12,21 +12,21 @@ import com.example.pmeuepocaespecial.R
 import com.example.pmeuepocaespecial.activities.user.ProjectTaskActivity
 import com.example.pmeuepocaespecial.datatypes.Task
 
-class TaskAdapter(private val taskList: List<Task>, private val context: Context) : RecyclerView.Adapter<TaskAdapter.ProjectViewHolder>() {
+class TaskAdapter(private val taskList: List<Task>, private val context: Context) : RecyclerView.Adapter<TaskAdapter.TaskViewHolder>() {
 
     private val taskIntent = Intent(context, ProjectTaskActivity::class.java)
-    class ProjectViewHolder(projectView: View) : RecyclerView.ViewHolder(projectView) {
+    class TaskViewHolder(projectView: View) : RecyclerView.ViewHolder(projectView) {
         var taskName: TextView = itemView.findViewById(R.id.taskName)
         var taskCategory: TextView = itemView.findViewById(R.id.taskCategory)
         var taskButton: Button = itemView.findViewById<Button>(R.id.taskButton)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProjectViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.task_item_layout, parent, false)
-        return ProjectViewHolder(itemView)
+        return TaskViewHolder(itemView)
     }
 
-    override fun onBindViewHolder(holder: ProjectViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: TaskViewHolder, position: Int) {
         val currentItem = taskList[position]
         holder.taskName.text = currentItem.title
         holder.taskCategory.text = currentItem.category
