@@ -132,5 +132,6 @@
     <string name="delete_string">Delete</string>
     <string name="create_task_title">New Task</string>
     <string name="task_create_success">Task Created</string>
+    <string name="system_users">System Users</string>
 
 </resources>

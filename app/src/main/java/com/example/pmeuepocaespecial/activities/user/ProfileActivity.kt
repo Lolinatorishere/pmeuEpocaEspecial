@@ -6,7 +6,9 @@ import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.ui.text.InternalTextApi
 import com.example.pmeuepocaespecial.R
+import com.example.pmeuepocaespecial.activities.admin.ManageUsersActivity
 import com.example.pmeuepocaespecial.activities.admin.UserEditActivity
 import com.example.pmeuepocaespecial.databinding.ActivityProfileBinding
 import com.example.pmeuepocaespecial.helpers.UserAuthHelper
@@ -46,6 +48,17 @@ class ProfileActivity : AppCompatActivity() {
         binding.btnLogout.setOnClickListener {
             userAuth.logout()
             val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+        if(userAuth.checkUserAuth()){
+            binding.EditSystemUsers.visibility = View.VISIBLE
+        }else{
+            binding.EditSystemUsers.visibility = View.GONE
+        }
+
+        binding.EditSystemUsers.setOnClickListener{
+            val intent = Intent(this, ManageUsersActivity::class.java )
             startActivity(intent)
             finish()
         }

@@ -37,7 +37,6 @@ class UserEditActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
-
         if(!userAuth.checkLoginStatus()) startActivity(loginIntent)
 
         super.onCreate(savedInstanceState)

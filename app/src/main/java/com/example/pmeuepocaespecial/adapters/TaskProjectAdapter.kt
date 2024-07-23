@@ -9,6 +9,7 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pmeuepocaespecial.R
+import com.example.pmeuepocaespecial.activities.admin.ProjectManageTasksActivity
 import com.example.pmeuepocaespecial.activities.user.ProjectTaskActivity
 import com.example.pmeuepocaespecial.datatypes.Task
 import com.example.pmeuepocaespecial.helpers.DatabaseHelper
@@ -53,8 +54,10 @@ class TaskProjectAdapter(
         }
 
         holder.taskDelete.setOnClickListener {
+            val intent = Intent(context, ProjectManageTasksActivity::class.java)
+            intent.putExtra("projectId", projectId)
             dbHelper.deleteTask(currentItem.id, context )
-            context.startActivity(taskIntent)
+            context.startActivity(intent)
         }
     }
 

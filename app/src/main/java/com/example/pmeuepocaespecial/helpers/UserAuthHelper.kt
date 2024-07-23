@@ -43,6 +43,13 @@ class UserAuthHelper(private val context: Context){
 
     }
 
+    fun checkUserId(user_id: Int): Boolean{
+        val dbHelper = DatabaseHelper(context)
+        val sharedLogin = context.getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
+        val userId = sharedLogin.getInt("userId", 0)
+        return user_id == userId
+    }
+
     private fun setUserInfo(isLoggedIn: Boolean, user_id: Int) {
         val sharedLogin = context.getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
         val loginEditor = sharedLogin.edit()

@@ -105,6 +105,22 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".activities.admin.ManageUsersActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.example.MANAGE_USERS"/>
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activities.admin.UserEditActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.example.EDIT_USER"/>
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
 
     </application>
 

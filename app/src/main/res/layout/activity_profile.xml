@@ -71,7 +71,16 @@
         android:paddingStart="16dp"
         android:text="permission"
         android:textSize="18sp" />
-
+    <Button
+        android:id="@+id/EditSystemUsers"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/permissionTextView"
+        android:layout_marginTop="16dp"
+        android:paddingStart="16dp"
+        android:text="@string/manage_users"
+        android:visibility="gone"
+        android:textSize="18sp" />
         <LinearLayout
             android:id="@+id/buttonLayout"
             android:layout_width="match_parent"

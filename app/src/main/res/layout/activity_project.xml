@@ -200,12 +200,6 @@
         android:orientation="vertical">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/tasks"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@id/buttonProjectInfo" />
-
-        <androidx.recyclerview.widget.RecyclerView
             android:layout_below="@id/buttonProjectInfo"
             android:id="@+id/users"
             android:layout_width="match_parent"

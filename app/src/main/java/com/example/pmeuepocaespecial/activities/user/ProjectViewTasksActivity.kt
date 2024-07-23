@@ -4,7 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.pmeuepocaespecial.adapters.TaskProjectAdapter
+import com.example.pmeuepocaespecial.adapters.TaskAdapter
 import com.example.pmeuepocaespecial.databinding.ActivityViewProjectTasksBinding
 import com.example.pmeuepocaespecial.datatypes.Task
 import com.example.pmeuepocaespecial.helpers.DatabaseHelper
@@ -40,7 +40,7 @@ class ProjectViewTasksActivity : AppCompatActivity() {
       private fun initializeRecyclerView() {
         val tasksList = fetchTasks()
 
-        val taskAdapter = TaskProjectAdapter(tasksList, this, projectId)
+        val taskAdapter = TaskAdapter(tasksList, this, projectId)
         binding.tasks.apply {
             layoutManager = LinearLayoutManager(this@ProjectViewTasksActivity)
             adapter = taskAdapter

@@ -14,18 +14,17 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.pmeuepocaespecial.R
 import com.example.pmeuepocaespecial.activities.admin.ManageUsersActivity
 import com.example.pmeuepocaespecial.activities.admin.UserEditActivity
-import com.example.pmeuepocaespecial.activities.user.ProjectTaskActivity
 import com.example.pmeuepocaespecial.datatypes.User
 import com.example.pmeuepocaespecial.helpers.DatabaseHelper
 import com.example.pmeuepocaespecial.helpers.UserAuthHelper
 
-class UserAdapter(private val userList: List<User>, private val context: Context) : RecyclerView.Adapter<UserAdapter.UserViewHolder>() {
+class SystemUserAdapter(private val userList: List<User>, private val context: Context) : RecyclerView.Adapter<SystemUserAdapter.SystemUserViewHolder>() {
 
     private val userIntent = Intent(context, UserEditActivity::class.java)
     private val userAuth = UserAuthHelper(context)
     private val dbHelper = DatabaseHelper(context)
 
-    class UserViewHolder(projectView: View) : RecyclerView.ViewHolder(projectView) {
+    class SystemUserViewHolder(projectView: View) : RecyclerView.ViewHolder(projectView) {
 
         var userProfile: ImageView = itemView.findViewById(R.id.userImage)
         var userName: TextView = itemView.findViewById(R.id.userUsername)
@@ -34,12 +33,12 @@ class UserAdapter(private val userList: List<User>, private val context: Context
         var userDelete: Button = itemView.findViewById<Button>(R.id.userDelete)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SystemUserViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.user_item_layout, parent, false)
-        return UserViewHolder(itemView)
+        return SystemUserViewHolder(itemView)
     }
 
-    override fun onBindViewHolder(holder: UserViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: SystemUserViewHolder, position: Int) {
         val currentItem = userList[position]
         if(currentItem.pfp != null){
             val bitmap = BitmapFactory.decodeByteArray(currentItem.pfp, 0, currentItem.pfp.size)
@@ -50,8 +49,9 @@ class UserAdapter(private val userList: List<User>, private val context: Context
         holder.userName.text = currentItem.username
         holder.userEmail.text = currentItem.email
         holder.userButton.setOnClickListener {
-            userIntent.putExtra("userId", currentItem.id)
-            context.startActivity(userIntent)
+            val intent = Intent(context, UserEditActivity::class.java)
+            intent.putExtra("userId", currentItem.id)
+            context.startActivity(intent)
         }
         if(userAuth.checkUserAuth()){
             if (!userAuth.checkUserId(currentItem.id)){
@@ -74,4 +74,3 @@ class UserAdapter(private val userList: List<User>, private val context: Context
 
     override fun getItemCount() = userList.size
 }
-

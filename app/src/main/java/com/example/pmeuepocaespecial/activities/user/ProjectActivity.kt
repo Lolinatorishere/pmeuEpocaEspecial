@@ -41,21 +41,18 @@ class ProjectActivity : AppCompatActivity() {
 
 
         setContentView(binding.root)
+
         displayInfo(projectId)
+        //initializeUserRecyclerView()
 
-        initializeUserRecyclerView()
+        //initializeTaskRecyclerView()
 
-        initializeTaskRecyclerView()
-
-
-        binding.btnShowTasks.setOnClickListener {
-            binding.tasks.visibility = View.VISIBLE
-            binding.users.visibility = View.GONE
-        }
 
         binding.btnShowTasks.setOnClickListener {
-            binding.tasks.visibility = View.GONE
-            binding.users.visibility = View.VISIBLE
+            val taskIntent = Intent(this, ProjectViewTasksActivity::class.java)
+            intent.putExtra("projectId", projectId)
+            startActivity(taskIntent)
+            finish()
         }
 
         binding.btnReturnToMain.setOnClickListener {
@@ -103,12 +100,12 @@ class ProjectActivity : AppCompatActivity() {
             binding.descriptionContent.text = it.description
         }
     }
-    private fun initializeTaskRecyclerView() {
-        val taskList = fetchTasks()
-        val taskAdapter = TaskAdapter(taskList, this, projectId)
-            binding.tasks.layoutManager = LinearLayoutManager(this)
-            binding.tasks.adapter = taskAdapter
-    }
+    //private fun initializeTaskRecyclerView() {
+    //    val taskList = fetchTasks()
+    //    val taskAdapter = TaskAdapter(taskList, this, projectId)
+    //        binding.tasks.layoutManager = LinearLayoutManager(this)
+    //        binding.tasks.adapter = taskAdapter
+    //}
 
     private fun fetchTasks(): List<Task> {
         val tasks: MutableList<Task> = mutableListOf()
@@ -117,14 +114,14 @@ class ProjectActivity : AppCompatActivity() {
     }
 
 
-    private fun initializeUserRecyclerView() {
-        val userList = fetchUsers()
+    //private fun initializeUserRecyclerView() {
+    //    val userList = fetchUsers()
 
-        val projectAdapter = UserProjectAdapter(userList, this, projectId)
+    //    val projectAdapter = UserProjectAdapter(userList, this, projectId)
 
-        binding.tasks.adapter = projectAdapter
-        binding.tasks.layoutManager = LinearLayoutManager(this)
-    }
+    //    binding.tasks.adapter = projectAdapter
+    //    binding.tasks.layoutManager = LinearLayoutManager(this)
+    //}
 
     private fun fetchUsers(): List<User> {
         val tasks: MutableList<User> = mutableListOf()
