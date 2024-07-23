@@ -121,5 +121,9 @@
     <string name="email" translatable="false">Email</string>
     <string name="permission">Type</string>
     <string name="username" translatable="false">Username</string>
+    <string name="manage_tasks">Manage Tasks</string>
+    <string name="manage_users">Manage Users</string>
+    <string name="edit_project_title">Edit Project</string>
+    <string name="edit_project_success">Project Altered</string>
 
 </resources>

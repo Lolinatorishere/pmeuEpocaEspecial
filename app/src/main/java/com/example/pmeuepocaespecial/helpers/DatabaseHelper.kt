@@ -249,7 +249,7 @@ class DatabaseHelper(context: Context) :
                 cursor.getString(cursor.getColumnIndexOrThrow("description")),
                 cursor.getString(cursor.getColumnIndexOrThrow("date_created")),
                 cursor.getInt(cursor.getColumnIndexOrThrow("status")),
-                cursor.getString(cursor.getColumnIndexOrThrow("category")),
+                cursor.getString(cursor.getColumnIndexOrThrow("category"))
             )
             cursor.close()
             return dbProject
@@ -622,7 +622,11 @@ class DatabaseHelper(context: Context) :
         val values = ContentValues().apply {
             put("title", title)
             put("description", description)
-            put("status", status)
+            if(status == null){
+                put("status", 1)
+            }else{
+                put("status", status)
+            }
             put("category", category)
         }
 

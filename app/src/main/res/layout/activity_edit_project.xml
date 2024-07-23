@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    tools:context=".activities.admin.AddProjectActivity">
+
+    <TextView
+        android:id="@+id/PageTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:text="@string/edit_project_title"
+        android:textColor="@color/orange"
+        android:textSize="24sp"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="16dp" />
+
+    <EditText
+        android:id="@+id/addProjectName"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_below="@id/PageTitle"
+        android:layout_marginTop="16dp"
+        android:hint="@string/create_project_title_hint"
+        android:textSize="20sp"
+        android:background="@drawable/orange_border"
+        android:paddingStart="16dp"
+        android:maxLines="1"/>
+
+    <EditText
+        android:id="@+id/addProjectCategory"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_below="@id/addProjectName"
+        android:layout_marginTop="16dp"
+        android:hint="@string/create_project_category_hint"
+        android:textSize="20sp"
+        android:background="@drawable/orange_border"
+        android:paddingStart="16dp"
+        android:maxLines="1"/>
+    <EditText
+        android:id="@+id/addProjectDescription"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_below="@id/addProjectCategory"
+        android:layout_marginTop="16dp"
+        android:hint="@string/create_project_description_hint"
+        android:textSize="20sp"
+        android:background="@drawable/orange_border"
+        android:paddingStart="16dp"
+        android:maxLines="1"/>
+
+    <Button
+        android:id="@+id/btnManageUsers"
+        android:layout_marginTop="16dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/addProjectDescription"
+        android:text="@string/manage_tasks" />
+
+    <Button
+        android:id="@+id/btnManageTasks"
+        android:layout_marginTop="16dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btnManageUsers"
+        android:text="@string/manage_users" />
+
+    <LinearLayout
+        android:id="@+id/buttonLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:gravity="center">
+        <Button
+            android:id="@+id/returnButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/previous" />
+        <Button
+            android:id="@+id/editButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/orange"
+            android:textColor="@color/white"
+            android:text="@string/edit" />
+    </LinearLayout>
+
+</RelativeLayout>
+</ScrollView>

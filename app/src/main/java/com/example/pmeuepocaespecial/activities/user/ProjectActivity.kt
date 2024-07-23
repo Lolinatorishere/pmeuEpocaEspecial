@@ -73,7 +73,9 @@ class ProjectActivity : AppCompatActivity() {
                     Toast.makeText(this, R.string.no_authorisation , Toast.LENGTH_SHORT).show()
                 }
             }else{
-                startActivity(projectEditIntent);
+                val intent = Intent(this, ProjectEditActivity::class.java)
+                intent.putExtra("projectId", projectId)
+                startActivity(intent);
                 finish()
             }
         }

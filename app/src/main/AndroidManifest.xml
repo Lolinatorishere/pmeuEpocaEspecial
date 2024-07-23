@@ -53,8 +53,13 @@
             android:name=".activities.user.ProfileActivity"
             android:exported="true" />
         <activity
-            android:name=".activities.user.ProfileEditActivity"
-            android:exported="false" />
+            android:name=".activities.admin.ProjectEditActivity"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="com.example.PROJECT_UPDATE"/>
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".activities.user.ProjectActivity"
             android:exported="false">
