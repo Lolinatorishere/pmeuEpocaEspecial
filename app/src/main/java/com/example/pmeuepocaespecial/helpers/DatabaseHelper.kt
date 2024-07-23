@@ -256,7 +256,7 @@ class DatabaseHelper(context: Context) :
                 cursor.getInt(cursor.getColumnIndexOrThrow("id")),
                 cursor.getString(cursor.getColumnIndexOrThrow("title")),
                 cursor.getString(cursor.getColumnIndexOrThrow("description")),
-                cursor.getString(cursor.getColumnIndexOrThrow("date")),
+                cursor.getString(cursor.getColumnIndexOrThrow("date_created")),
                 cursor.getInt(cursor.getColumnIndexOrThrow("status")),
                 cursor.getString(cursor.getColumnIndexOrThrow("category")),
             )

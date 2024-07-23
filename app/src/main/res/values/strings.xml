@@ -106,5 +106,12 @@
     <string name="create_project_no_input">Please Fill Out All Fields</string>
     <string name="create_project_success">Project Created Successfully</string>
     <string name="create_project_title_non_unique">The Project Title has been Taken</string>
+    <string name="title">Title:</string>
+    <string name="status">Status:</string>
+    <string name="date">Date:</string>
+    <string name="description">Description:</string>
+    <string name="category">Category</string>
+    <string name="status_active">Active</string>
+    <string name="status_inactive">Inactive</string>
 
 </resources>
