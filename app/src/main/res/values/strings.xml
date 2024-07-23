@@ -118,8 +118,8 @@
     <string name="edit">Edit</string>
     <string name="users">Users</string>
     <string name="tasks">Tasks</string>
-    <string name="email">Email</string>
+    <string name="email" translatable="false">Email</string>
     <string name="permission">Type</string>
-    <string name="username">Username</string>
+    <string name="username" translatable="false">Username</string>
 
 </resources>

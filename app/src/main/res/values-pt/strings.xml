@@ -57,4 +57,20 @@
     <string name="create_project_description_hint">Descrição</string>
     <string name="create_project_title">Novo Projeto</string>
     <string name="create_project">Criar</string>
+    <string name="create_project_no_input">Preenche Todos Os Campos</string>
+    <string name="create_project_success">Projeto Criado</string>
+    <string name="create_project_title_non_unique">Titulo do Projeto Já Existe</string>
+    <string name="title">Titulo:</string>
+    <string name="status">Estado:</string>
+    <string name="date">Data:</string>
+    <string name="description">Descrição:</string>
+    <string name="category">Caregoria</string>
+    <string name="status_active">Ativo</string>
+    <string name="status_inactive">Inativo</string>
+    <string name="no_authorisation">Não Têm Permissoẽs</string>
+    <string name="profile">Perfil</string>
+    <string name="edit">Editar</string>
+    <string name="users">Utilizadores</string>
+    <string name="tasks">Tarefas</string>
+    <string name="permission">Tipo</string>
 </resources>
