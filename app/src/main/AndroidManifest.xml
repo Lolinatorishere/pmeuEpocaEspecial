@@ -50,11 +50,8 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.user.ProfileActivity"
-            android:exported="true" />
-        <activity
             android:name=".activities.admin.ProjectEditActivity"
-            android:exported="false" >
+            android:exported="true" >
             <intent-filter>
                 <action android:name="com.example.PROJECT_UPDATE"/>
                 <category android:name="android.intent.category.DEFAULT" />
@@ -62,9 +59,49 @@
         </activity>
         <activity
             android:name=".activities.user.ProjectActivity"
-            android:exported="false">
+            android:exported="true">
             <intent-filter>
                 <action android:name="com.example.lab004.SEG"/>
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activities.admin.ProjectManageTasksActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.example.lab004.SEG"/>
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activities.user.ProfileActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.example.USER_PROFILE"/>
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activities.admin.ProjectManageUsersActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.example.lab004.SEG"/>
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activities.admin.AddTaskActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.example.CREATE_TASK"/>
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activities.user.ProjectViewTasksActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.example.VIEW_TASKS"/>
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>

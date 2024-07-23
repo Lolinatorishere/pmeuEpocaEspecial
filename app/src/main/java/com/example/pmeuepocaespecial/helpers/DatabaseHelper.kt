@@ -125,18 +125,20 @@ class DatabaseHelper(context: Context) :
         return functionStringReturn(context.getString(R.string.user_create_success), true)
     }
 
-    fun insertTask(task: Task) {
+    fun insertTask(task: Task, context: Context): functionStringReturn {
         val db = writableDatabase
         val values = ContentValues().apply {
             put("title", task.title)
             put("description", task.description)
             put("date_created", task.dateCreated)
             put("date_finished", task.dateFinished)
-            put("percent_done", task.percentDone)
+            put("points", task.percentDone)
             put("status", task.status)
             put("category", task.category)
             put("project_id", task.projectId)
         }
+        db.insert("tasks", null, values)
+        return functionStringReturn(context.getString(R.string.task_create_success), true)
     }
 
     fun insertProject(project: Project) {
@@ -399,11 +401,11 @@ class DatabaseHelper(context: Context) :
         while (cursor.moveToNext()) {
             val proj_task = Task(
                 cursor.getInt(cursor.getColumnIndexOrThrow("id")),
-                cursor.getString(cursor.getColumnIndexOrThrow("string")),
+                cursor.getString(cursor.getColumnIndexOrThrow("title")),
                 cursor.getString(cursor.getColumnIndexOrThrow("description")),
                 cursor.getString(cursor.getColumnIndexOrThrow("date_created")),
                 cursor.getString(cursor.getColumnIndexOrThrow("date_finished")),
-                cursor.getInt(cursor.getColumnIndexOrThrow("percent_done")),
+                cursor.getInt(cursor.getColumnIndexOrThrow("points")),
                 cursor.getInt(cursor.getColumnIndexOrThrow("status")),
                 cursor.getString(cursor.getColumnIndexOrThrow("category")),
                 cursor.getInt(cursor.getColumnIndexOrThrow("project_id"))

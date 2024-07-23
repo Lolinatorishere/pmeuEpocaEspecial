@@ -73,4 +73,8 @@
     <string name="users">Utilizadores</string>
     <string name="tasks">Tarefas</string>
     <string name="permission">Tipo</string>
+    <string name="manage_tasks">Gerir Tarefas</string>
+    <string name="manage_users">Gerir Utilizadores</string>
+    <string name="edit_project_title">Editar Projeto</string>
+    <string name="edit_project_success">Projeto Alterado</string>
 </resources>

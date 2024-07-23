@@ -125,5 +125,12 @@
     <string name="manage_users">Manage Users</string>
     <string name="edit_project_title">Edit Project</string>
     <string name="edit_project_success">Project Altered</string>
+    <string name="close_project">Close Project</string>
+    <string name="reopen_project">Open Project</string>
+    <string name="delete_project">Delete Project</string>
+    <string name="select_string">Select</string>
+    <string name="delete_string">Delete</string>
+    <string name="create_task_title">New Task</string>
+    <string name="task_create_success">Task Created</string>
 
 </resources>

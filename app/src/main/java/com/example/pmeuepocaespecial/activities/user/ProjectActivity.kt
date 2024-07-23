@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.pmeuepocaespecial.R
 import com.example.pmeuepocaespecial.activities.admin.ProjectEditActivity
 import com.example.pmeuepocaespecial.adapters.TaskAdapter
+import com.example.pmeuepocaespecial.adapters.TaskProjectAdapter
 import com.example.pmeuepocaespecial.adapters.UserProjectAdapter
 import com.example.pmeuepocaespecial.databinding.ActivityProjectBinding
 import com.example.pmeuepocaespecial.datatypes.Task
@@ -37,13 +38,15 @@ class ProjectActivity : AppCompatActivity() {
         val userAdmin = userAuth.checkUserAuth()
         val projectAuth = userAuth.checkProjectAuth(projectId)
 
-        initializeTaskRecyclerView()
+
+
+        setContentView(binding.root)
+        displayInfo(projectId)
 
         initializeUserRecyclerView()
 
-        setContentView(binding.root)
+        initializeTaskRecyclerView()
 
-        displayInfo(projectId)
 
         binding.btnShowTasks.setOnClickListener {
             binding.tasks.visibility = View.VISIBLE
@@ -102,11 +105,9 @@ class ProjectActivity : AppCompatActivity() {
     }
     private fun initializeTaskRecyclerView() {
         val taskList = fetchTasks()
-
-        val projectAdapter = TaskAdapter(taskList, this)
-
-        binding.tasks.adapter = projectAdapter
-        binding.tasks.layoutManager = LinearLayoutManager(this)
+        val taskAdapter = TaskAdapter(taskList, this, projectId)
+            binding.tasks.layoutManager = LinearLayoutManager(this)
+            binding.tasks.adapter = taskAdapter
     }
 
     private fun fetchTasks(): List<Task> {
@@ -114,6 +115,7 @@ class ProjectActivity : AppCompatActivity() {
         tasks.addAll(dbHelper.getProjectTasks(projectId))
         return tasks
     }
+
 
     private fun initializeUserRecyclerView() {
         val userList = fetchUsers()

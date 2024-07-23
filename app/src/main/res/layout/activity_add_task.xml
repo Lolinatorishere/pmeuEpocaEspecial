@@ -18,7 +18,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:text="@string/edit_project_title"
+        android:text="@string/create_task_title"
         android:textColor="@color/orange"
         android:textSize="24sp"
         tools:layout_editor_absoluteX="16dp"
@@ -50,76 +50,16 @@
     <EditText
         android:id="@+id/addProjectDescription"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="match_parent"
         android:layout_below="@id/addProjectCategory"
+        android:layout_above="@id/buttonLayout"
         android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
         android:hint="@string/create_project_description_hint"
         android:textSize="20sp"
         android:background="@drawable/orange_border"
         android:paddingStart="16dp"
         android:maxLines="1"/>
-
-    <Button
-        android:id="@+id/btnManageTasks"
-        android:layout_marginTop="16dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/addProjectDescription"
-        android:text="@string/manage_tasks" />
-
-    <Button
-        android:id="@+id/btnManageUsers"
-        android:layout_marginTop="16dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/btnManageTasks"
-        android:text="@string/manage_users" />
-
-    <Button
-        android:id="@+id/btnBuffer"
-        android:layout_marginTop="16dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/btnManageUsers"
-        android:clickable="false"
-        android:visibility="invisible"
-        android:text="@string/reopen_project" />
-
-    <Button
-        android:id="@+id/btnSetStatusComplete"
-        android:layout_marginTop="16dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/btnManageUsers"
-        android:backgroundTint="@color/blue"
-        android:text="@string/close_project" />
-    <Button
-        android:id="@+id/btnSetStatusReOpen"
-        android:layout_marginTop="16dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/btnManageUsers"
-        android:backgroundTint="@color/green"
-        android:text="@string/reopen_project" />
-
-    <Button
-        android:id="@+id/btnBuffer2"
-        android:layout_marginTop="16dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/btnBuffer"
-        android:clickable="false"
-        android:visibility="invisible"
-        android:text="@string/delete_project" />
-
-    <Button
-        android:id="@+id/btnDeleteProject"
-        android:layout_marginTop="16dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/btnBuffer"
-        android:backgroundTint="@color/red"
-        android:text="@string/delete_project" />
 
     <LinearLayout
         android:id="@+id/buttonLayout"
@@ -134,19 +74,12 @@
             android:layout_height="wrap_content"
             android:text="@string/previous" />
         <Button
-            android:id="@+id/editButton"
+            android:id="@+id/createButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/orange"
             android:textColor="@color/white"
-            android:text="@string/edit" />
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/btnBuffer2"
-        android:layout_above="@id/buttonLayout">
-
+            android:text="@string/create_project" />
     </LinearLayout>
 
 </RelativeLayout>

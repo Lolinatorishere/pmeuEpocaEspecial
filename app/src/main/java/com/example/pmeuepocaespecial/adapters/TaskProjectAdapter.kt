@@ -13,28 +13,29 @@ import com.example.pmeuepocaespecial.activities.user.ProjectTaskActivity
 import com.example.pmeuepocaespecial.datatypes.Task
 import com.example.pmeuepocaespecial.helpers.DatabaseHelper
 
-class TaskAdapter(
+class TaskProjectAdapter(
     private val taskList: List<Task>,
     private val context: Context,
     private val projectId: Int
-) : RecyclerView.Adapter<TaskAdapter.TaskViewHolder>() {
+) : RecyclerView.Adapter<TaskProjectAdapter.TaskProjectViewHolder>() {
 
     private val taskIntent = Intent(context, ProjectTaskActivity::class.java)
     private val dbHelper = DatabaseHelper(context)
-    class TaskViewHolder(projectView: View) : RecyclerView.ViewHolder(projectView) {
+    class TaskProjectViewHolder(projectView: View) : RecyclerView.ViewHolder(projectView) {
 
         var taskTitle: TextView = itemView.findViewById(R.id.taskName)
         var taskCategory: TextView = itemView.findViewById(R.id.taskCategory)
         var taskStatus: TextView = itemView.findViewById(R.id.taskStatus)
         var taskButton: Button = itemView.findViewById<Button>(R.id.taskButton)
+        var taskDelete: Button = itemView.findViewById<Button>(R.id.taskDelete)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskViewHolder {
-        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.project_task_item_layout, parent, false)
-        return TaskViewHolder(itemView)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskProjectViewHolder {
+        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.task_item_layout, parent, false)
+        return TaskProjectViewHolder(itemView)
     }
 
-    override fun onBindViewHolder(holder: TaskViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: TaskProjectViewHolder, position: Int) {
         val currentItem = taskList[position]
         holder.taskTitle.text = currentItem.title
         holder.taskCategory.text = currentItem.category
@@ -43,10 +44,16 @@ class TaskAdapter(
         }else{
             holder.taskStatus.text = context.getString(R.string.status_inactive)
         }
+        holder.taskDelete.visibility = View.VISIBLE
         holder.taskButton.text = context.getString(R.string.select_string)
         holder.taskButton.setOnClickListener {
             taskIntent.putExtra("taskId", currentItem.id)
             taskIntent.putExtra("projectId", projectId)
+            context.startActivity(taskIntent)
+        }
+
+        holder.taskDelete.setOnClickListener {
+            dbHelper.deleteTask(currentItem.id, context )
             context.startActivity(taskIntent)
         }
     }

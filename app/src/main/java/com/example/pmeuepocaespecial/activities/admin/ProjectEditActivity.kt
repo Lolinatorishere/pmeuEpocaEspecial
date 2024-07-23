@@ -2,6 +2,7 @@ package com.example.pmeuepocaespecial.activities.admin
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.ui.AppBarConfiguration
@@ -26,6 +27,58 @@ class ProjectEditActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         setEditHints(projectId)
+        val project = dbHelper.getProject(projectId)
+
+        binding.btnManageTasks.setOnClickListener {
+            val intent = Intent(this, ProjectManageTasksActivity::class.java)
+            intent.putExtra("projectId", projectId)
+            startActivity(intent)
+            finish()
+        }
+
+        binding.btnManageUsers.setOnClickListener {
+            val intent = Intent(this, ProjectManageUsersActivity::class.java)
+            intent.putExtra("projectId", projectId)
+            startActivity(intent)
+            finish()
+        }
+
+        if (project != null) {
+            if(project.status == 1){
+                binding.btnSetStatusReOpen.visibility = View.GONE
+                binding.btnSetStatusComplete.visibility = View.VISIBLE
+            }else{
+                binding.btnSetStatusReOpen.visibility = View.VISIBLE
+                binding.btnSetStatusComplete.visibility = View.GONE
+            }
+        }else{
+            binding.btnSetStatusReOpen.visibility = View.VISIBLE
+            binding.btnSetStatusComplete.visibility = View.GONE
+        }
+
+
+        binding.btnDeleteProject.setOnClickListener {
+            val message = dbHelper.deleteProject(projectId, this)
+            Toast.makeText(this, message.returnString, Toast.LENGTH_SHORT).show()
+            if(message.returnBoolean){
+                finish()
+                val intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)
+            }
+        }
+
+
+        binding.btnSetStatusComplete.setOnClickListener {
+            changeStatus(0)
+            finish()
+            startActivity(intent)
+        }
+
+        binding.btnSetStatusReOpen.setOnClickListener {
+            changeStatus(1)
+            finish()
+            startActivity(intent)
+        }
 
         binding.returnButton.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
