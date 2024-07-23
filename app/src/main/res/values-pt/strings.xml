@@ -77,4 +77,12 @@
     <string name="manage_users">Gerir Utilizadores</string>
     <string name="edit_project_title">Editar Projeto</string>
     <string name="edit_project_success">Projeto Alterado</string>
+    <string name="close_project">Terminar Projeto</string>
+    <string name="reopen_project">Reabrir Projeto</string>
+    <string name="delete_project">Apagar Projeto</string>
+    <string name="select_string">Selecionar</string>
+    <string name="delete_string">Apagar</string>
+    <string name="create_task_title">Nova Tarefa</string>
+    <string name="task_create_success">Tarefa Criada</string>
+    <string name="system_users">Utilizadores Do Sistema</string>
 </resources>
