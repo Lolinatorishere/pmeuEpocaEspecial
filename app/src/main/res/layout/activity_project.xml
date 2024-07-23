@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true">
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activities.user.ProfileActivity">
@@ -165,39 +165,82 @@
             android:textSize="18sp" />
     </LinearLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
+    <LinearLayout
         android:layout_below="@id/projectDescription"
-        android:id="@+id/tasks"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"/>
+        android:id="@+id/buttonProjectInfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:gravity="center">
 
-        <LinearLayout
-            android:layout_below="@id/tasks"
-            android:id="@+id/buttonLayout"
+        <Button
+            android:id="@+id/btnShowTasks"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/tasks"
+            android:layout_marginEnd="4dp"/>
+
+        <Button
+            android:id="@+id/btnShowUsers"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/users"
+            android:layout_marginStart="4dp"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="600dp"
+        android:layout_below="@id/buttonProjectInfo"
+        android:orientation="vertical">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/tasks"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/buttonProjectInfo" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_below="@id/buttonProjectInfo"
+            android:id="@+id/users"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:orientation="horizontal"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:gravity="center">
+            android:visibility="gone"
+            />
 
-            <Button
-                android:id="@+id/btnReturnToMain"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="home"
-                android:layout_marginEnd="4dp"/>
 
-            <Button
-                android:id="@+id/btnAlterProject"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Edit"
-                android:layout_marginStart="4dp"/>
-        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+    android:id="@+id/buttonLayout"
+    android:layout_width="match_parent"
+    android:layout_height="69dp"
+    android:layout_alignParentBottom="true"
+    android:gravity="center"
+    android:orientation="horizontal"
+    android:paddingStart="16dp"
+    android:paddingEnd="16dp">
+
+    <Button
+        android:id="@+id/btnReturnToMain"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="4dp"
+        android:layout_weight="1"
+        android:text="@string/previous" />
+
+    <Button
+        android:id="@+id/btnAlterProject"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_weight="1"
+        android:text="@string/edit" />
+    </LinearLayout>
 
     </RelativeLayout>
 </ScrollView>

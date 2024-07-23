@@ -4,8 +4,8 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
-import androidx.compose.ui.res.stringResource
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.pmeuepocaespecial.R
 import com.example.pmeuepocaespecial.activities.admin.AddProjectActivity
@@ -20,7 +20,7 @@ class MainActivity : AppCompatActivity() {
     private val userAuth = UserAuthHelper(this)
     private val dbHelper = DatabaseHelper(this);
     private val imgHelper = ImageHelper(this);
-    private val loginIntent = Intent("com.example.lab001.SEG")
+    private val loginIntent = Intent("com.example.ACTION_LOGOUT")
 
     private lateinit var binding: ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,7 +44,13 @@ class MainActivity : AppCompatActivity() {
             userAuth.logout()
         }
 
-       initializeRecyclerView()
+        initializeRecyclerView()
+
+        if(!userAuth.checkUserAuth()){
+            binding.addButton.visibility = View.GONE
+        }else{
+            binding.addButton.visibility = View.VISIBLE
+        }
 
         binding.addButton.setOnClickListener {
             if (user != null) {
@@ -67,7 +73,9 @@ class MainActivity : AppCompatActivity() {
         }
 
     }
-    private fun initializeRecyclerView() {
+
+    // Fetch user information and display it
+   private fun initializeRecyclerView() {
         val projectsList = fetchProjects()
 
         val projectAdapter = ProjectAdapter(projectsList, this)

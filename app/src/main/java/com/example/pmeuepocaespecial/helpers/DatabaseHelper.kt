@@ -122,7 +122,6 @@ class DatabaseHelper(context: Context) :
             put("user_permission", 0)
         }
         db.insert("users", null, values)
-        db.close()
         return functionStringReturn(context.getString(R.string.user_create_success), true)
     }
 
@@ -138,7 +137,6 @@ class DatabaseHelper(context: Context) :
             put("category", task.category)
             put("project_id", task.projectId)
         }
-        db.close()
     }
 
     fun insertProject(project: Project) {
@@ -151,7 +149,6 @@ class DatabaseHelper(context: Context) :
             put("category", project.category)
         }
         db.insert("projects", null, values)
-        db.close()
     }
 
     ////------------------------------------------ READ --------------------------------------------////
@@ -171,13 +168,11 @@ class DatabaseHelper(context: Context) :
                 cursor.getInt(cursor.getColumnIndexOrThrow("user_permission"))
             )
             cursor.close()
-            db.close()
             if (password != db_user.password) {
                 return empty_user
             }
             return getUserPublic(db_user.id)
         }
-        db.close()
         return empty_user
     }
 
@@ -215,10 +210,8 @@ class DatabaseHelper(context: Context) :
                 cursor.getInt(cursor.getColumnIndexOrThrow("user_permission"))
             )
             cursor.close()
-            db.close()
             return db_user
         }
-        db.close()
         return empty_user
     }
 
@@ -238,11 +231,9 @@ class DatabaseHelper(context: Context) :
                 cursor.getInt(cursor.getColumnIndexOrThrow("user_permission"))
             )
             cursor.close()
-            db.close()
             println(db_user)
             return db_user
         }
-        db.close()
         return empty_user
     }
 
@@ -261,10 +252,8 @@ class DatabaseHelper(context: Context) :
                 cursor.getString(cursor.getColumnIndexOrThrow("category")),
             )
             cursor.close()
-            db.close()
             return dbProject
         }
-        db.close()
         return emptyProject
     }
 
@@ -287,10 +276,8 @@ class DatabaseHelper(context: Context) :
 
                 )
             cursor.close()
-            db.close()
             return db_task
         }
-        db.close()
         return empty_task
     }
 
@@ -307,10 +294,8 @@ class DatabaseHelper(context: Context) :
                 cursor.getInt(cursor.getColumnIndexOrThrow("percentDone")),
             )
             cursor.close()
-            db.close()
             return db_commit
         }
-        db.close()
         return empty_commit
     }
 
@@ -332,7 +317,6 @@ class DatabaseHelper(context: Context) :
             db_users.add(db_user)
         }
         cursor.close()
-        db.close()
         return db_users
     }
 
@@ -353,7 +337,6 @@ class DatabaseHelper(context: Context) :
             dbProjects.add(dbProject)
         }
         cursor.close()
-        db.close()
     return dbProjects;
     }
 
@@ -370,7 +353,6 @@ class DatabaseHelper(context: Context) :
             }
         }
         cursor.close()
-        db.close()
         return proj_users
     }
 
@@ -379,7 +361,7 @@ class DatabaseHelper(context: Context) :
     fun getProjectPermissions(projectId: Int, userId: Int): Boolean {
         val db = readableDatabase
         var userPermissions: Boolean = false
-        val query = "SELECT * FROM member_list WHERE project_id = '$projectId' AND user_id = '$userId"
+        val query = "SELECT * FROM member_list WHERE project_id = '$projectId' AND user_id = '$userId'"
         val cursor = db.rawQuery(query, null)
         while (cursor.moveToFirst()) {
             val permission = cursor.getInt(cursor.getColumnIndexOrThrow("user_permissions"))
@@ -390,7 +372,6 @@ class DatabaseHelper(context: Context) :
             }
         }
         cursor.close()
-        db.close()
         return userPermissions
     }
 
@@ -407,7 +388,6 @@ class DatabaseHelper(context: Context) :
             }
         }
         cursor.close()
-        db.close()
         return task_users
     }
 
@@ -431,7 +411,6 @@ class DatabaseHelper(context: Context) :
             proj_tasks.add(proj_task)
         }
         cursor.close()
-        db.close()
         return proj_tasks
     }
 
@@ -448,7 +427,6 @@ class DatabaseHelper(context: Context) :
             }
         }
         cursor.close()
-        db.close()
         return task_commits
     }
 
@@ -487,7 +465,6 @@ class DatabaseHelper(context: Context) :
             }
         }
         cursor.close()
-        db.close()
         return proj_commits
     }
 
@@ -502,7 +479,6 @@ class DatabaseHelper(context: Context) :
             user_commits.addAll(commits)
         }
         cursor.close()
-        db.close()
         return user_commits
     }
 
@@ -517,7 +493,6 @@ class DatabaseHelper(context: Context) :
             user_commits.addAll(commits)
         }
         cursor.close()
-        db.close()
         return user_commits
     }
 
@@ -569,7 +544,7 @@ class DatabaseHelper(context: Context) :
                 }
 
             if (user.userPermission != originalUser.userPermission) {
-                permission = if (user.userPermission in 1 downTo 0) {
+                permission = if (user.userPermission in 1 downTo 0 && user.userPermission != null) {
                     user.userPermission
                 } else {
                     originalUser.userPermission
@@ -586,11 +561,10 @@ class DatabaseHelper(context: Context) :
             put("pfp", pfp)
             put("email", email)
             put("password", password)
-            put("permission", permission)
+            put("user_permission", permission)
         }
 
         val success = db.update("users", values, "id = ?", arrayOf(userId.toString()))
-        db.close()
         return if (success > 0) {
             context.getString(R.string.user_update_success_start) +
                     username +
@@ -653,7 +627,6 @@ class DatabaseHelper(context: Context) :
         }
 
         val success = db.update("projects", values, "id = ?", arrayOf(projectId.toString()))
-        db.close()
         return if (success > 0) {
             functionStringReturn(context.getString(R.string.project_update_success_start) +
                     title +
@@ -702,7 +675,6 @@ class DatabaseHelper(context: Context) :
         }
 
         val success = db.update("tasks", values, "id = ?", arrayOf(taskId.toString()))
-        db.close()
         return if (success > 0) {
             functionStringReturn(context.getString(R.string.task_update_success_start) +
                     title +
@@ -741,7 +713,6 @@ class DatabaseHelper(context: Context) :
         }
 
         val success = db.update("commits", values, "id = ?", arrayOf(commitId.toString()))
-        db.close()
         return if (success > 0) {
             functionStringReturn(context.getString(R.string.commit_update_success_start) +
                     originalCommit.id +
@@ -757,7 +728,6 @@ class DatabaseHelper(context: Context) :
         val db = writableDatabase
         val whereArgs = arrayOf(userId.toString())
         val deletedRows = db.delete("users", "id = ?", whereArgs)
-        db.close()
         if(deletedRows == 0){
             return functionStringReturn(context.getString(R.string.delete_user_failure), false)
         }
@@ -768,7 +738,6 @@ class DatabaseHelper(context: Context) :
         val db = writableDatabase
         val whereArgs = arrayOf(projectId.toString())
         val deletedRows = db.delete("projects", "id = ?", whereArgs)
-        db.close()
         if(deletedRows == 0){
             return functionStringReturn(context.getString(R.string.delete_project_failure), false)
         }
@@ -779,7 +748,6 @@ class DatabaseHelper(context: Context) :
         val db = writableDatabase
         val whereArgs = arrayOf(taskId.toString())
         val deletedRows = db.delete("tasks", "id = ?", whereArgs)
-        db.close()
         if(deletedRows == 0){
             return functionStringReturn(context.getString(R.string.delete_task_failure), false)
         }
@@ -790,7 +758,6 @@ class DatabaseHelper(context: Context) :
         val db = writableDatabase
         val whereArgs = arrayOf(commitId.toString())
         val deletedRows = db.delete("commits", "id = ?", whereArgs)
-        db.close()
         if(deletedRows == 0){
             return functionStringReturn(context.getString(R.string.delete_commit_failure), false)
         }
@@ -801,7 +768,6 @@ class DatabaseHelper(context: Context) :
         val db = writableDatabase
         val whereArgs = arrayOf(userId.toString(), projectId.toString())
         val deletedRows = db.delete("member_list", "user_id = ? AND project_id = ? ", whereArgs)
-        db.close()
         if(deletedRows == 0){
             return functionStringReturn(context.getString(R.string.delete_user_from_project_failure), false)
         }
@@ -812,7 +778,6 @@ class DatabaseHelper(context: Context) :
         val db = writableDatabase
         val whereArgs = arrayOf(userId.toString(), taskId.toString())
         val deletedRows = db.delete("task_list", "user_id = ? AND task_id = ? ", whereArgs)
-        db.close()
         if(deletedRows == 0){
             return functionStringReturn(context.getString(R.string.delete_task_failure), false)
         }

@@ -6,4 +6,4 @@ data class User( val id: Int,
                  val pfp: ByteArray?,
                  val email: String,
                  val password: String,
-                 val userPermission: Int)
+                 val userPermission: Int?)

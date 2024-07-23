@@ -1,6 +1,7 @@
 package com.example.pmeuepocaespecial.helpers
 
 import android.content.Context
+import android.content.Intent
 import com.example.pmeuepocaespecial.datatypes.User
 
 class UserAuthHelper(private val context: Context){
@@ -12,6 +13,8 @@ class UserAuthHelper(private val context: Context){
 
     fun logout(){
         setUserInfo(false, 0)
+        val logoutIntent = Intent("com.example.ACTION_LOGOUT")
+        context.sendBroadcast(logoutIntent)
     }
 
     fun checkLoginStatus(): Boolean {
@@ -29,15 +32,14 @@ class UserAuthHelper(private val context: Context){
         return userInfo.userPermission == 1
     }
 
-    fun checkProjectAuth(projectId: Int): Int{
+    fun checkProjectAuth(projectId: Int): Boolean{
         //checks if admin if yes auto returns true
-        if(checkUserAuth()) return 2; //returns admin code
         val dbHelper = DatabaseHelper(context)
         val sharedLogin = context.getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
         val userId = sharedLogin.getInt("userId", 0)
         val userPerm = dbHelper.getProjectPermissions(projectId, userId)
-        if(userPerm) return 1
-        return 0;
+        if(userPerm) return true
+        return false;
 
     }
 

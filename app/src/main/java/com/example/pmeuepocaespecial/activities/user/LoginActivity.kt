@@ -1,6 +1,9 @@
 package com.example.pmeuepocaespecial.activities.user
 
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
@@ -10,7 +13,7 @@ import com.example.pmeuepocaespecial.R
 import com.example.pmeuepocaespecial.helpers.UserAuthHelper
 
 class LoginActivity : AppCompatActivity() {
-
+    private lateinit var logoutReciever: BroadcastReceiver
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
@@ -20,6 +23,15 @@ class LoginActivity : AppCompatActivity() {
         val passwordEditText = findViewById<EditText>(R.id.password)
         val loginButton = findViewById<Button>(R.id.loginButton)
         val registerButton = findViewById<Button>(R.id.registerButton)
+
+        logoutReciever = object : BroadcastReceiver(){
+            override fun onReceive(context: Context?, intent: Intent?) {
+                finish()
+                startActivity(Intent(context, LoginActivity::class.java))
+            }
+        }
+
+        registerReceiver(logoutReciever, IntentFilter("com.example.ACTION_LOGOUT"))
 
         loginButton.setOnClickListener {
             val username = usernameEditText.text.toString().trim()
@@ -45,6 +57,11 @@ class LoginActivity : AppCompatActivity() {
             startActivity(registerIntent)
             finish()
         }
+    }
+
+    override fun onDestroy(){
+        super.onDestroy()
+        unregisterReceiver(logoutReciever)
     }
 }
 

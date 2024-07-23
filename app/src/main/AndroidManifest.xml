@@ -29,7 +29,7 @@
             android:name=".activities.user.LoginActivity"
             android:exported="true">
             <intent-filter>
-                <action android:name="com.example.lab001.SEG"/>
+                <action android:name="com.example.ACTION_LOGOUT"/>
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
@@ -38,6 +38,14 @@
             android:exported="true" >
             <intent-filter>
                 <action android:name="com.example.lab002.SEG"/>
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activities.user.UserEditActivity"
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="com.example.USER_UPDATE"/>
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>

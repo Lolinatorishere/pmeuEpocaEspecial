@@ -17,7 +17,7 @@ import com.example.pmeuepocaespecial.helpers.ImageHelper
 class RegisterActivity : AppCompatActivity() {
     private var imageByteArray: ByteArray = byteArrayOf()
     override fun onCreate(savedInstanceState: Bundle?) {
-        val loginIntent = Intent("com.example.lab001.SEG")
+        val loginIntent = Intent(this, LoginActivity::class.java)
         val pickImageResultLauncher = registerForActivityResult(
             ActivityResultContracts.GetContent()
         ) { uri ->

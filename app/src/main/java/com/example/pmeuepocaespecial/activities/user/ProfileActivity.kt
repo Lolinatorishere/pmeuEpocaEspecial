@@ -4,16 +4,18 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.example.pmeuepocaespecial.R
+import com.example.pmeuepocaespecial.activities.admin.UserEditActivity
 import com.example.pmeuepocaespecial.databinding.ActivityProfileBinding
 import com.example.pmeuepocaespecial.helpers.UserAuthHelper
 import com.example.pmeuepocaespecial.helpers.DatabaseHelper
 
 class ProfileActivity : AppCompatActivity() {
     private lateinit var binding: ActivityProfileBinding
-    private val loginIntent = Intent("android.intent.action.MAIN")
-    private val profileEditIntent = Intent(this, ProfileEditActivity::class.java)
+    private val loginIntent = Intent(this, LoginActivity::class.java)
+    private val userEditIntent = Intent("com.example.USER_UPDATE")
 
     private var userAuth = UserAuthHelper(this)
     private var dbHelper = DatabaseHelper(this)
@@ -29,10 +31,18 @@ class ProfileActivity : AppCompatActivity() {
             startActivity(intent);
             finish()
         }
+
+        if(!userAuth.checkUserAuth()){
+            binding.btnAlterProfile.visibility = View.GONE
+        }else{
+            binding.btnAlterProfile.visibility = View.VISIBLE
+        }
+
         binding.btnAlterProfile.setOnClickListener {
-            startActivity(profileEditIntent);
+            startActivity(userEditIntent);
             finish()
         }
+
         binding.btnLogout.setOnClickListener {
             userAuth.logout()
             val intent = Intent(this, MainActivity::class.java)

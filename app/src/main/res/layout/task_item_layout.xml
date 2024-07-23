@@ -24,6 +24,12 @@
             android:layout_height="wrap_content"
             android:text="Task Category"
             android:textAppearance="?attr/textAppearanceListItem" />
+        <TextView
+            android:id="@+id/taskStatus"
+            android:layout_width="173dp"
+            android:layout_height="wrap_content"
+            android:text="Task Status"
+            android:textAppearance="?attr/textAppearanceListItem" />
     </LinearLayout>
 
     <Button

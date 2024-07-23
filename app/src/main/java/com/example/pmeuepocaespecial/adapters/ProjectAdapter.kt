@@ -11,11 +11,11 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pmeuepocaespecial.R
+import com.example.pmeuepocaespecial.activities.user.ProjectActivity
 import com.example.pmeuepocaespecial.datatypes.Project
 
 class ProjectAdapter(private val projectList: List<Project>, private val context: Context) : RecyclerView.Adapter<ProjectAdapter.ProjectViewHolder>() {
 
-    private val projectIntent = Intent("com.example.lab004.SEG")
     class ProjectViewHolder(projectView: View) : RecyclerView.ViewHolder(projectView) {
         var projectImage: ImageView = itemView.findViewById(R.id.projectImage)
         var projectName: TextView = itemView.findViewById(R.id.projectName)
@@ -34,6 +34,7 @@ class ProjectAdapter(private val projectList: List<Project>, private val context
         holder.projectName.text = currentItem.title
         holder.projectCategory.text = currentItem.category
         holder.projectButton.setOnClickListener {
+            val projectIntent = Intent(context , ProjectActivity::class.java)
             projectIntent.putExtra("projectId", currentItem.id)
             context.startActivity(projectIntent)
         }
