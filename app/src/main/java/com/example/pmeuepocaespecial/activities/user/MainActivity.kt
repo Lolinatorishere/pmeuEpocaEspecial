@@ -60,6 +60,12 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        binding.profileImageView.setOnClickListener{
+            val profileIntent = Intent(this, ProfileActivity::class.java)
+            startActivity(profileIntent)
+            finish()
+        }
+
     }
     private fun initializeRecyclerView() {
         val projectsList = fetchProjects()

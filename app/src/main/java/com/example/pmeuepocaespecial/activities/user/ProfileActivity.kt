@@ -12,8 +12,7 @@ import com.example.pmeuepocaespecial.helpers.DatabaseHelper
 
 class ProfileActivity : AppCompatActivity() {
     private lateinit var binding: ActivityProfileBinding
-    private val loginIntent = Intent(this, LoginActivity::class.java)
-    private val mainIntent = Intent(this, MainActivity::class.java)
+    private val loginIntent = Intent("android.intent.action.MAIN")
     private val profileEditIntent = Intent(this, ProfileEditActivity::class.java)
 
     private var userAuth = UserAuthHelper(this)
@@ -26,15 +25,24 @@ class ProfileActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityProfileBinding.inflate(layoutInflater)
         binding.btnReturnToMain.setOnClickListener {
-            startActivity(mainIntent);
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent);
+            finish()
         }
         binding.btnAlterProfile.setOnClickListener {
             startActivity(profileEditIntent);
+            finish()
+        }
+        binding.btnLogout.setOnClickListener {
+            userAuth.logout()
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+            finish()
         }
         setContentView(binding.root)
 
-        val sharedUserId = getSharedPreferences("UserIdPrefs", Context.MODE_PRIVATE)
-        val userId = sharedUserId.getInt("UserId", 0)
+        val sharedUserId = getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
+        val userId = sharedUserId.getInt("userId", 0)
 
         // Fetch user information and display it
         displayUserInfo(userId)
@@ -48,9 +56,10 @@ class ProfileActivity : AppCompatActivity() {
         val byteArray: ByteArray = user?.pfp ?: ByteArray(0)
         val bitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
         var userLevel = R.string.user_permission_user
+        var userText = getString(R.string.user_permission_user)
         if (user != null) {
             if(user.userPermission == 1){
-               userLevel = R.string.user_permission_admin
+               userText = getString(R.string.user_permission_admin)
             }
         }
         user?.let{
@@ -58,7 +67,7 @@ class ProfileActivity : AppCompatActivity() {
             binding.usernameTextView.text = it.username
             binding.nameTextView.text = it.name
             binding.emailTextView.text = it.email
-            binding.permissionTextView.text = it.email
+            binding.permissionTextView.text = userText
         }
     }
 }
